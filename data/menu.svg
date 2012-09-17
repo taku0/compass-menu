@@ -1,0 +1,395 @@
+<svg version="1.1" id="menu" class="supress-compass-menu" xmlns="http://www.w3.org/2000/svg" width="600px" height="300px">
+  <defs>
+    <filter id="drop-shadow" filterUnits="userSpaceOnUse" x="-250" y="-100" width="600" height="300">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>
+      <feOffset in="blur" dx="0" dy="5" result="offsetBlur"/>
+      <feComponentTransfer in="offsetBlur" result="offsetBlurAlpha">
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode in="offsetBlurAlpha"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <clipPath id="clip">
+      <path d="M0,0 100,0 100,100 0,100 0,0  M32.5,50 A17.5,17.5 0 1 0 67.5,50 A17.5,17.5 0 1 0 32.5,50" clip-rule="evenodd"/>
+    </clipPath>
+  </defs>
+  <defs>
+    <g id="back">
+      <g> 
+        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="16.307" y1="10.501" x2="4.693" y2="10.501"/>
+        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" points="10.655,16.463  4.693,10.501 10.655,4.538"/>
+      </g>
+    </g>
+    <g id="up">
+      <g> 
+        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="10.499" y1="16.307" x2="10.499" y2="4.693"/>
+        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" points="4.537,10.655  10.499,4.693 16.462,10.655"/>
+      </g>
+    </g>
+    <g id="fast_back">
+      <g> 
+        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="17.836" y1="10.501" x2="6.842" y2="10.501"/>
+        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" points="13.622,15.15  8.974,10.501 13.622,5.852"/>
+        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" points="8.338,15.15  3.688,10.501 8.338,5.852"/>
+      </g>
+    </g>
+    <g id="folder">
+      <g>
+        <g>
+          <path fill="#666666" d="M3.278,15.421c0,0.276,0.224,0.5,0.5,0.5h13.443c0.276,0,0.5-0.224,0.5-0.5V6.957 c0-0.276-0.224-0.5-0.5-0.5H3.778c-0.276,0-0.5,0.224-0.5,0.5V15.421z"/>
+        </g>
+        <g>
+          <path fill="#666666" d="M10.206,6.524c0-0.037-0.057-0.067-0.126-0.067S9.928,6.371,9.895,6.266L9.588,5.27 C9.556,5.165,9.439,5.079,9.329,5.079H4.934c-0.11,0-0.227,0.086-0.259,0.191L4.367,6.266C4.334,6.371,4.251,6.457,4.182,6.457 s-0.125,0.03-0.125,0.067s0.09,0.067,0.2,0.067h5.749C10.116,6.591,10.206,6.561,10.206,6.524z"/>
+        </g>
+      </g>
+    </g>
+    <g id="new">
+      <g> 
+        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="3.938" y1="10.501" x2="17.062" y2="10.501"/> 
+        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="10.501" y1="3.938" x2="10.501" y2="17.062"/>
+      </g>
+    </g>
+    <g id="stop">
+      <g> 
+        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="5.861" y1="15.141" x2="15.141" y2="5.861"/> 
+        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="5.86" y1="5.859" x2="15.141" y2="15.14"/>
+      </g>
+    </g>
+    <g id="save">
+      <g>
+        <g>
+          <g>
+            <polygon fill="#666666" points="11.745,7.262 11.745,3.429 9.255,3.429 9.255,7.262 7.524,7.262 10.5,10.245 13.476,7.262"/>
+          </g>
+        </g>
+        <g>
+          <g>
+            <path fill="#666666" d="M16.847,7.13h-2.385c0.041,0.304-0.056,0.614-0.278,0.838l-2.976,2.983 c-0.188,0.188-0.442,0.294-0.708,0.294s-0.521-0.105-0.708-0.294L6.816,7.968c-0.285-0.286-0.37-0.716-0.216-1.089 c0.155-0.374,0.52-0.617,0.924-0.617h0.73V5.751H5.309c-0.11,0-0.227,0.086-0.259,0.191L4.742,6.939 C4.709,7.044,4.626,7.13,4.557,7.13H4.153c-0.276,0-0.5,0.224-0.5,0.5v7.119c0,0.276,0.224,0.5,0.5,0.5h12.693 c0.276,0,0.5-0.224,0.5-0.5V7.63C17.347,7.354,17.123,7.13,16.847,7.13z"/>
+          </g>
+        </g>
+      </g>
+    </g>
+    <g id="fullscreen">
+      <g>
+        <g>
+          <polygon fill="#666666" points="11.499,4.454 16.546,4.452 16.546,9.501"/> 
+          <rect x="11.586" y="6.212" transform="matrix(0.7071 0.7071 -0.7071 0.7071 9.5259 -6.6968)" fill="#666666" width="2.522" height="3.877"/>
+        </g>
+        <g>
+          <polygon fill="#666666" points="9.501,16.548 4.454,16.548 4.454,11.499"/> 
+          <rect x="6.89" y="10.911" transform="matrix(-0.7075 -0.7067 0.7067 -0.7075 4.8373 27.7014)" fill="#666666" width="2.523" height="3.878"/>
+        </g>
+      </g>
+    </g>
+    <g id="first">
+      <g> 
+        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="18.129" y1="10.501" x2="6.516" y2="10.501"/> 
+        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 12.478,16.463 6.516,10.501 12.478,4.538"/> 
+        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="5.323" y1="4.52" x2="5.323" y2="16.479"/>
+      </g>
+    </g>
+    <g id="forward">
+      <g> 
+        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="4.693" y1="10.501" x2="16.307" y2="10.501"/>
+        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" points="10.345,16.463  16.307,10.501 10.345,4.538"/>
+      </g>
+    </g>
+    <g id="fast_forward">
+      <g> 
+        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="3.164" y1="10.501" x2="14.158" y2="10.501"/>
+        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" points="7.378,15.15  12.026,10.501 7.378,5.852"/>
+        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" points="12.662,15.15  17.312,10.501 12.662,5.852"/>
+      </g>
+    </g>
+    <g id="last">
+      <g> 
+        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="2.871" y1="10.501" x2="14.484" y2="10.501"/> 
+        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 8.522,16.463 14.484,10.501 8.522,4.538"/> 
+        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="15.677" y1="4.52" x2="15.677" y2="16.479"/>
+      </g>
+    </g>
+    <g id="undo">
+      <g>
+        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" points="7.614,9.418  5.028,6.823 7.621,4.232"/>
+        <path fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" d="M6.324,6.823h5.971 c2.03,0,3.677,1.646,3.677,3.675c0,2.03-1.646,3.678-3.677,3.678H6.324"/>
+      </g>
+    </g>
+    <g id="redo">
+      <g>
+        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" points="13.386,9.418  15.972,6.823 13.379,4.232"/>
+        <path fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" d="M14.676,6.823H8.705 c-2.03,0-3.677,1.646-3.677,3.675c0,2.03,1.646,3.678,3.677,3.678h5.971"/>
+      </g>
+    </g>
+    <g id="open_location">
+      <g>
+        <rect x="3.693" y="7.023" fill="none" stroke="#666666" stroke-width="2" stroke-miterlimit="10" width="13.613" height="6.953"/>
+        <line fill="none" stroke="#666666" stroke-width="2" stroke-miterlimit="10" x1="7.001" y1="8.292" x2="7.001" y2="12.751"/>
+      </g>
+    </g>
+    <g id="bookmark">
+      <polygon fill="#666666" points="10.5,14.177 6.178,16.449 7.004,11.637 3.508,8.229 8.34,7.526 10.5,3.147 12.66,7.526  17.492,8.229 13.997,11.637 14.823,16.449"/>
+    </g>
+    <g id="info">
+      <g>
+        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="square" stroke-miterlimit="10" points="10.501,16  10.501,9 9.306,9"/>
+        <circle fill="#666666" cx="10.5" cy="4.133" r="1.832"/>
+      </g>
+    </g>
+    <g id="source">
+      <g> 
+        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 7.94,13.579 2.988,10.501 7.94,7.421"/> 
+        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 13.06,7.421 18.012,10.501 13.06,13.579"/>
+      </g>
+    </g>
+    <g id="page">
+      <g> 
+        <polygon fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 14.627,16.261 6.327,16.261 6.327,5.346 12.062,5.346 14.627,7.871"/> 
+        <polygon fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 14.627,7.871 12.062,7.871 12.062,5.346"/>
+      </g>
+    </g>
+    <g id="selection">
+      <g>
+        <rect x="4.738" y="6.715" fill="#666666" width="11.524" height="7.566"/>
+        <polyline fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" points="16.602,14.707  13.227,10.501 16.602,6.293"/>
+        <polyline fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" points="4.399,6.293  7.773,10.499 4.399,14.707"/>
+      </g>
+    </g>
+    <g id="open_link">
+      <g>
+        <g>
+          <g>
+            <polygon fill="#666666" points="15.667,5.334 10.289,5.34 11.85,6.901 8.391,10.361 10.638,12.607 14.098,9.149 15.66,10.711"/>
+          </g>
+        </g>
+        <g>
+          <g>
+            <path fill="#666666" d="M16.589,4.949c-0.05-0.119-0.122-0.229-0.215-0.322c-0.093-0.093-0.203-0.166-0.322-0.215 C16.294,4.513,16.487,4.706,16.589,4.949z M16.042,11.635c-0.374,0.155-0.804,0.068-1.089-0.217l-0.286-0.286v3.534H6.333V6.334 h3.535L9.582,6.047C9.295,5.761,9.21,5.331,9.364,4.958C9.519,4.584,9.883,4.34,10.288,4.34l5.378-0.006H5.333 c-0.552,0-1,0.447-1,1v10.332c0,0.553,0.448,1,1,1h10.333c0.552,0,1-0.447,1-1V5.335l-0.007,5.377 C16.659,11.116,16.416,11.48,16.042,11.635z M16.657,5.287c0.001,0.017,0.01,0.032,0.01,0.048V5.334 C16.667,5.317,16.658,5.303,16.657,5.287z"/>
+          </g>
+        </g>
+      </g>
+    </g>
+    <g id="cut">
+      <g>
+        <polygon fill="#666666" points="16.427,14.175 16.028,11.567 12.804,9.932 11.134,10.121 5.235,5.125 5.069,5.291 5.151,5.762  10.12,11.135 11.136,11.135 14.903,14.902 15.565,15.035"/>
+        <polygon fill="#666666" points="8.907,17.289 7.345,15.164 8.468,11.727 9.782,10.68 10.421,2.977 10.655,2.977 10.931,3.367  11.216,10.68 10.499,11.398 10.499,16.727 10.124,17.289"/>
+        <circle fill="#666666" cx="10.5" cy="10.5" r="0.258"/>
+      </g>
+    </g>
+    <g id="copy">
+      <g> 
+        <polygon fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 13.478,17.129 5.178,17.129 5.178,6.215 7.523,6.215 7.522,14.785 13.478,14.785"/>
+        <g> 
+          <polygon fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 15.822,14.785 7.522,14.785 7.522,3.871 13.257,3.871 15.822,6.396"/> 
+          <polygon fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 15.822,6.396 13.257,6.396 13.257,3.871"/>
+        </g>
+      </g>
+    </g>
+    <g id="paste">
+      <g> 
+        <polygon fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 16.251,17.547 7.951,17.547 7.951,6.633 13.686,6.633 16.251,9.158"/>
+        <g>
+          <g>
+            <path fill="#666666" d="M7.951,6.633h5.734l0.826,0.813V5.508c0-0.552-0.448-1-1-1H5.749c-0.552,0-1,0.448-1,1v9.814 c0,0.552,0.448,1,1,1h2.202V6.633z"/>
+          </g>
+        </g> 
+        <polygon fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 16.251,9.158 13.686,9.158 13.686,6.633"/>
+        <g>
+          <path fill="#666666" d="M7.16,4.986c0,0.552,0.448,1,1,1h2.941c0.552,0,1-0.448,1-1V4.453c0-0.552-0.448-1-1-1H8.16 c-0.552,0-1,0.448-1,1V4.986z"/>
+        </g>
+      </g>
+    </g>
+    <g id="tab">
+      <g>
+        <g>
+          <path fill="#666666" d="M18.32,11.283c0-0.55-0.45-1-1-1h-0.661c-0.55,0-1.132-0.43-1.294-0.956l-0.188-0.608 c-0.162-0.525-0.745-0.956-1.294-0.956H7.115c-0.55,0-1.133,0.43-1.295,0.956L5.632,9.328c-0.162,0.526-0.745,0.956-1.295,0.956 H3.68c-0.55,0-1,0.45-1,1v0.953c0,0.55,0.45,1,1,1H17.32c0.55,0,1-0.45,1-1V11.283z"/>
+        </g>
+        <rect x="2.68" y="10.283" fill="#666666" width="15.641" height="0.811"/>
+      </g>
+    </g>
+    <g id="window">
+	    <g>
+		    <rect x="4.5" y="7.5" fill="none" stroke="#666666" stroke-width="2" stroke-miterlimit="10" width="11" height="8"/>
+			  <rect x="4.5" y="6.5" fill="none" stroke="#666666" stroke-width="2" stroke-linejoin="round" stroke-miterlimit="10" width="11" height="9"/>
+	    </g>
+    </g>
+    <g id="reload">
+      <g>
+        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" points="12.996,11.637  15.892,10.5 17.033,13.396"/>
+        <path fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" d="M15.892,10.5 c0,2.904-2.354,5.26-5.257,5.26"/>
+        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" points="8.271,9.363  5.375,10.5 4.233,7.604"/>
+        <path fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" d="M5.375,10.5 c0-2.903,2.355-5.259,5.26-5.259"/>
+        <g>
+          <g>
+            <path fill="#666666" d="M13.863,8.61l2.819-1.106c-1.106-2.226-3.398-3.763-6.047-3.763c-0.828,0-1.5,0.672-1.5,1.5 s0.672,1.5,1.5,1.5C12.015,6.741,13.21,7.498,13.863,8.61z"/>
+          </g>
+        </g>
+        <g>
+          <g>
+            <path fill="#666666" d="M10.635,14.26c-1.381,0-2.578-0.757-3.231-1.87l-2.819,1.106c1.107,2.227,3.4,3.764,6.051,3.764 c0.828,0,1.5-0.672,1.5-1.5S11.463,14.26,10.635,14.26z"/>
+          </g>
+        </g>
+      </g>
+    </g>
+    <g id="block">
+      <g>
+        <circle fill="none" stroke="#666666" stroke-width="2" stroke-miterlimit="10" cx="10.5" cy="10.5" r="6"/>
+        <line fill="none" stroke="#666666" stroke-width="2" stroke-miterlimit="10" x1="6.257" y1="6.258" x2="14.742" y2="14.742"/>
+      </g>
+    </g>
+    <g id="ok">
+      <path fill="#666666" d="M16.964,5.495c-3.933,6.235-5.641,10.8-5.641,10.8l-2.188,0.062l-4-5.438l2-1.625l2.969,4.062 C10.104,13.357,12.072,10.579,16.964,5.495z"/>
+    </g>
+    <g id="navigation">
+      <!-- good old ship's wheel -->
+	    <g>
+		    <circle fill="none" stroke="#666666" stroke-width="2" stroke-miterlimit="10" cx="10.5" cy="10.5" r="5.52"/>
+			  <line fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" x1="10.5" y1="2.925" x2="10.5" y2="18.075"/>
+			  <line fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" x1="2.924" y1="10.5" x2="18.074" y2="10.5"/>
+			  <line fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" x1="5.144" y1="5.145" x2="15.855" y2="15.856"/>
+			  <line fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" x1="5.144" y1="15.856" x2="15.855" y2="5.145"/>
+		    <circle fill="none" stroke="#666666" stroke-width="2" stroke-miterlimit="10" cx="10.499" cy="10.5" r="1.53"/>
+	    </g>
+    </g>
+    <g id="search">
+      <g> 
+        <circle fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" cx="8.852" cy="8.852" r="4.651"/>
+        <line fill="none" stroke="#666666" stroke-width="3" stroke-miterlimit="10" x1="12.141" y1="12.141" x2="16.799" y2="16.8"/>
+      </g>
+    </g>
+    <g id="frame">
+	    <g>
+			  <rect x="4.619" y="6.025" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" width="11.764" height="8.949"/>
+			  <line fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="9.051" y1="6.025" x2="9.051" y2="14.975"/>
+			  <line fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="9.051" y1="9.688" x2="16.383" y2="9.688"/>
+	    </g>
+    </g>
+  </defs>
+
+  <g transform="translate(250, 100)">
+    <g filter="url(#drop-shadow)" opacity=".95">
+      <g clip-path="url(#clip)">
+        <circle id="outer" cx="50" cy="50" r="45" stroke="#C0C0C0" stroke-width="1" fill="white"/>
+      </g>
+      <circle id="hole" cx="50" cy="50" r="17.5" stroke="#C0C0C0" stroke-width="1" fill="none"/>
+
+      <g id="balloon0">
+        <path d="M107.000,47.000 103.000,50.000 107.000,53.000" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <circle cx="117.000" cy="50.000" r="11.0" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <circle id="circle_stroke0" cx="215.000" cy="50.000" r="11.0" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <rect id="rect_stroke0" x="117.000" y="39.000" width="98" height="22" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <path d="M107.000,47.000 103.000,50.000 107.000,53.000" stroke="none" fill="white"/>
+        <circle cx="117.000" cy="50.000" r="11.0" stroke="none" fill="white"/>
+        <circle id="circle_fill0" cx="215.000" cy="50.000" r="11.0" stroke="none" fill="white"/>
+        <rect id="rect_fill0" x="117.000" y="39.000" width="98" height="22" stroke="none" fill="white"/>
+      </g>
+      <g id="balloon1">
+        <path d="M92.426,88.184 87.477,87.477 88.184,92.426" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <circle cx="97.376" cy="97.376" r="11.0" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <circle id="circle_stroke1" cx="195.376" cy="97.376" r="11.0" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <rect id="rect_stroke1" x="97.376" y="86.376" width="98" height="22" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <path d="M92.426,88.184 87.477,87.477 88.184,92.426" stroke="none" fill="white"/>
+        <circle cx="97.376" cy="97.376" r="11.0" stroke="none" fill="white"/>
+        <circle id="circle_fill1" cx="195.376" cy="97.376" r="11.0" stroke="none" fill="white"/>
+        <rect id="rect_fill1" x="97.376" y="86.376" width="98" height="22" stroke="none" fill="white"/>
+      </g>
+      <g id="balloon2">
+        <path d="M53.000,107.000 50.000,103.000 47.000,107.000" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <circle cx="50.000" cy="117.000" r="11.0" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <g transform="rotate(-20, 50.000, 117.000)"><circle id="circle_stroke2" cx="-48.000" cy="117.000" r="11.0" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+          <rect id="rect_stroke2" x="-48.000" y="106.000" width="98" height="22" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        </g>
+        <path d="M53.000,107.000 50.000,103.000 47.000,107.000" stroke="none" fill="white"/>
+        <circle cx="50.000" cy="117.000" r="11.0" stroke="none" fill="white"/>
+        <g transform="rotate(-20, 50.000, 117.000)"><circle id="circle_fill2" cx="-48.000" cy="117.000" r="11.0" stroke="none" fill="white"/>
+          <rect id="rect_fill2" x="-48.000" y="106.000" width="98" height="22" stroke="none" fill="white"/>
+        </g>
+      </g>
+      <g id="balloon3">
+        <path d="M11.816,92.426 12.523,87.477 7.574,88.184" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <circle cx="2.624" cy="97.376" r="11.0" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <circle id="circle_stroke3" cx="-95.376" cy="97.376" r="11.0" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <rect id="rect_stroke3" x="-95.376" y="86.376" width="98" height="22" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <path d="M11.816,92.426 12.523,87.477 7.574,88.184" stroke="none" fill="white"/>
+        <circle cx="2.624" cy="97.376" r="11.0" stroke="none" fill="white"/>
+        <circle id="circle_fill3" cx="-95.376" cy="97.376" r="11.0" stroke="none" fill="white"/>
+        <rect id="rect_fill3" x="-95.376" y="86.376" width="98" height="22" stroke="none" fill="white"/>
+      </g>
+      <g id="balloon4">
+        <path d="M-7.000,53.000 -3.000,50.000 -7.000,47.000" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <circle cx="-17.000" cy="50.000" r="11.0" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <circle id="circle_stroke4" cx="-115.000" cy="50.000" r="11.0" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <rect id="rect_stroke4" x="-115.000" y="39.000" width="98" height="22" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <path d="M-7.000,53.000 -3.000,50.000 -7.000,47.000" stroke="none" fill="white"/>
+        <circle cx="-17.000" cy="50.000" r="11.0" stroke="none" fill="white"/>
+        <circle id="circle_fill4" cx="-115.000" cy="50.000" r="11.0" stroke="none" fill="white"/>
+        <rect id="rect_fill4" x="-115.000" y="39.000" width="98" height="22" stroke="none" fill="white"/>
+      </g>
+      <g id="balloon5">
+        <path d="M7.574,11.816 12.523,12.523 11.816,7.574" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <circle cx="2.624" cy="2.624" r="11.0" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <circle id="circle_stroke5" cx="-95.376" cy="2.624" r="11.0" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <rect id="rect_stroke5" x="-95.376" y="-8.376" width="98" height="22" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <path d="M7.574,11.816 12.523,12.523 11.816,7.574" stroke="none" fill="white"/>
+        <circle cx="2.624" cy="2.624" r="11.0" stroke="none" fill="white"/>
+        <circle id="circle_fill5" cx="-95.376" cy="2.624" r="11.0" stroke="none" fill="white"/>
+        <rect id="rect_fill5" x="-95.376" y="-8.376" width="98" height="22" stroke="none" fill="white"/>
+      </g>
+      <g id="balloon6">
+        <path d="M47.000,-7.000 50.000,-3.000 53.000,-7.000" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <circle cx="50.000" cy="-17.000" r="11.0" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <g transform="rotate(-20, 50.000, -17.000)"><circle id="circle_stroke6" cx="148.000" cy="-17.000" r="11.0" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+          <rect id="rect_stroke6" x="50.000" y="-28.000" width="98" height="22" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        </g>
+        <path d="M47.000,-7.000 50.000,-3.000 53.000,-7.000" stroke="none" fill="white"/>
+        <circle cx="50.000" cy="-17.000" r="11.0" stroke="none" fill="white"/>
+        <g transform="rotate(-20, 50.000, -17.000)"><circle id="circle_fill6" cx="148.000" cy="-17.000" r="11.0" stroke="none" fill="white"/>
+          <rect id="rect_fill6" x="50.000" y="-28.000" width="98" height="22" stroke="none" fill="white"/>
+        </g>
+      </g>
+      <g id="balloon7">
+        <path d="M88.184,7.574 87.477,12.523 92.426,11.816" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <circle cx="97.376" cy="2.624" r="11.0" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <circle id="circle_stroke7" cx="195.376" cy="2.624" r="11.0" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <rect id="rect_stroke7" x="97.376" y="-8.376" width="98" height="22" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+        <path d="M88.184,7.574 87.477,12.523 92.426,11.816" stroke="none" fill="white"/>
+        <circle cx="97.376" cy="2.624" r="11.0" stroke="none" fill="white"/>
+        <circle id="circle_fill7" cx="195.376" cy="2.624" r="11.0" stroke="none" fill="white"/>
+        <rect id="rect_fill7" x="97.376" y="-8.376" width="98" height="22" stroke="none" fill="white"/>
+      </g>
+    </g>
+
+    <path id="marker0" d="M93.7801832722331,54.3926703324604 A44,44 0 0 0 93.7801832722331,45.6073296675396" stroke="#666" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <path id="marker1" d="M77.8511774937862,84.0633514529856 A44,44 0 0 0 84.0633514529856,77.8511774937862" stroke="#666" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <path id="marker2" d="M45.6073296675396,93.7801832722331 A44,44 0 0 0 54.3926703324604,93.7801832722331" stroke="#666" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <path id="marker3" d="M15.9366485470144,77.8511774937862 A44,44 0 0 0 22.1488225062138,84.0633514529856" stroke="#666" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <path id="marker4" d="M6.21981672776687,45.6073296675396 A44,44 0 0 0 6.21981672776687,54.3926703324604" stroke="#666" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <path id="marker5" d="M22.1488225062138,15.9366485470144 A44,44 0 0 0 15.9366485470144,22.1488225062138" stroke="#666" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <path id="marker6" d="M54.3926703324604,6.21981672776687 A44,44 0 0 0 45.6073296675396,6.21981672776687" stroke="#666" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <path id="marker7" d="M84.0633514529856,22.1488225062138 A44,44 0 0 0 77.8511774937862,15.9366485470144" stroke="#666" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+    <use id="item0" x="73" y="39.5" xlink:href="#forward"/>
+    <use id="item1" x="63.1880771697493" y="63.1880771697493" xlink:href="#page"/>
+    <use id="item2" x="39.5" y="73" xlink:href="#save"/>
+    <use id="item3" x="15.8119228302507" y="63.1880771697493" xlink:href="#page"/>
+    <use id="item4" x="6" y="39.5" xlink:href="#back"/>
+    <use id="item5" x="15.8119228302507" y="15.8119228302507" xlink:href="#window"/>
+    <use id="item6" x="39.5" y="6" xlink:href="#up"/>
+    <use id="item7" x="63.1880771697493" y="15.8119228302507" xlink:href="#tab"/>
+
+    <text id="shadow_text" x="0" y="0" font-size="16" stroke="none" fill="#666666" text-anchor="start" dominant-baseline="central" display="none"></text>
+
+    <text id="text0" x="117.000" y="50.000" font-size="16" stroke="none" fill="#666666" text-anchor="start" dominant-baseline="central">Quick Brown Fog</text>
+    <text id="text1" x="97.376" y="97.376" font-size="16" stroke="none" fill="#666666" text-anchor="start" dominant-baseline="central">Quick Brown Fog</text>
+    <g transform="rotate(-20, 50.000, 117.000)"><text id="text2" x="50.000" y="117.000" font-size="16" stroke="none" fill="#666666" text-anchor="end" dominant-baseline="central">Quick Brown Fog</text>
+    </g>
+    <text id="text3" x="2.624" y="97.376" font-size="16" stroke="none" fill="#666666" text-anchor="end" dominant-baseline="central">Quick Brown Fog</text>
+    <text id="text4" x="-17.000" y="50.000" font-size="16" stroke="none" fill="#666666" text-anchor="end" dominant-baseline="central">Quick Brown Fog</text>
+    <text id="text5" x="2.624" y="2.624" font-size="16" stroke="none" fill="#666666" text-anchor="end" dominant-baseline="central">Quick Brown Fog</text>
+    <g transform="rotate(-20, 50.000, -17.000)"><text id="text6" x="50.000" y="-17.000" font-size="16" stroke="none" fill="#666666" text-anchor="start" dominant-baseline="central">Quick Brown Fog</text>
+    </g>
+    <text id="text7" x="97.376" y="2.624" font-size="16" stroke="none" fill="#666666" text-anchor="start" dominant-baseline="central">Quick Brown Fog</text>
+  </g>
+</svg>

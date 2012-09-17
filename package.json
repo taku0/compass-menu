@@ -1,0 +1,9 @@
+{
+  "name": "compass_menu",
+  "fullName": "compass_menu",
+  "description": "an easy mouse gesture",
+  "author": "taku0",
+  "license": "MPL 2.0",
+  "id": "compass_menu@tatapa.org",
+  "version": "0.1"
+}
