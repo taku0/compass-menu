@@ -106,11 +106,14 @@ types.MenuFilter = null;
  * @param {Array.<types.MenuFilter>} menuFilters
  *     An array of menu filters.
  * @param {Object.<string, *>} config An configurations.
+ * @param {Object.<string, string>} localizedLabels
+ *   An map from label keys to localized label strings.
  */
 function PieMenu(container, menuNode, outer, hole,
                  itemElements, markerElements,
                  textSetters,
-                 contexts, menuFilters, config) {
+                 contexts, menuFilters, config,
+                 localizedLabels) {
     if (!(this instanceof PieMenu)) {
         return new PieMenu();
     }
@@ -127,6 +130,8 @@ function PieMenu(container, menuNode, outer, hole,
     this.items = contexts['page'];
     this.menuFilters = menuFilters;
     this.config = config;
+    this.localizedLabels = localizedLabels;
+
     this.variantIndex = 0;
     this.labelVisible = false;
 
@@ -525,7 +530,13 @@ PieMenu.prototype.updateLabelTexts = function() {
         var textSetter = this.textSetters[i];
 
         if (variant) {
-            textSetter(variant.label);
+            var localizedLabel = this.localizedLabels[variant.label];
+
+            if (!localizedLabel) {
+                localizedLabel = variant.label;
+            }
+
+            textSetter(localizedLabel);
         } else {
             textSetter(null);
         }
@@ -1333,7 +1344,8 @@ function initialize(event) {
                            textSetters,
                            contexts,
                            menuFilters,
-                           config);
+                           config,
+                           self.options.localizedLabels);
 
     menu.onMouseDown(event);
 }

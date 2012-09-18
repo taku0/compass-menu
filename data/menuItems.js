@@ -24,16 +24,16 @@ var pageMenu = {
         [
             {
                 icon: "#source",
-                label: "page_source",
-                action: function() {console.log("page_source");}
+                label: "view_page_source",
+                action: function() {console.log("view_page_source");}
             }
         ],
         null,
         [
             {
                 icon: "#info",
-                label: "page_info",
-                action: function() {console.log("page_info");}
+                label: "view_page_info",
+                action: function() {console.log("view_page_info");}
             }
         ],
         null
@@ -47,8 +47,8 @@ var windowMenu = {
         [
             {
                 icon: "#forward",
-                label: "next_window",
-                action: function() {console.log("next_window");}
+                label: "view_next_window",
+                action: function() {console.log("view_next_window");}
             }
         ],
         null,
@@ -68,16 +68,16 @@ var windowMenu = {
         [
             {
                 icon: "#back",
-                label: "previous_window",
-                action: function() {console.log("previous_window");}
+                label: "view_previous_window",
+                action: function() {console.log("view_previous_window");}
             }
         ],
         null,
         [
             {
                 icon: "#new",
-                label: "new_window",
-                action: function() {console.log("new_window");}
+                label: "open_new_window",
+                action: function() {console.log("open_new_window");}
             },
             {
                 icon: "#new",
@@ -96,8 +96,8 @@ var tabMenu = {
         [
             {
                 icon: "#forward",
-                label: "next_tab",
-                action: function() {console.log("next_tab");}
+                label: "view_next_tab",
+                action: function() {console.log("view_next_tab");}
             }
         ],
         null,
@@ -117,16 +117,16 @@ var tabMenu = {
         [
             {
                 icon: "#back",
-                label: "previous_tab",
-                action: function() {console.log("previous_tab");}
+                label: "view_previous_tab",
+                action: function() {console.log("view_previous_tab");}
             }
         ],
         null,
         [
             {
                 icon: "#new",
-                label: "new_tab",
-                action: function() {console.log("new_tab");}
+                label: "open_new_tab",
+                action: function() {console.log("open_new_tab");}
             },
             {
                 icon: "#new",
@@ -151,9 +151,9 @@ var navigationMenu = {
             },
             {
                 icon: "#last",
-                label: "last",
+                label: "go_to_last",
                 classes: ["forward"],
-                action: function() {console.log("last");}
+                action: function() {console.log("go_to_last");}
             }
         ],
         [
@@ -190,9 +190,9 @@ var navigationMenu = {
             },
             {
                 icon: "#first",
-                label: "first",
+                label: "go_to_first",
                 classes: ["back"],
-                action: function() {console.log("back");}
+                action: function() {console.log("go_to_first");}
             }
         ],
         [
@@ -256,13 +256,13 @@ var selectionMenu = {
         [
             {
                 icon: "#search",
-                label: "search_web",
-                action: function() {console.log("search_web");}
+                label: "search_the_web",
+                action: function() {console.log("search_the_web");}
             },
             {
                 icon: "#search",
-                label: "search_web_in_new_tab",
-                action: function() {console.log("search_web_in_new_tab");}
+                label: "search_the_web_in_new_tab",
+                action: function() {console.log("search_the_web_in_new_tab");}
             }
         ],
         [
@@ -506,8 +506,8 @@ var frameMenu = {
         [
             {
                 icon: "#source",
-                label: "frame_source",
-                action: function() {console.log("frame_source");}
+                label: "view_frame_source",
+                action: function() {console.log("view_frame_source");}
             }
         ],
         [
@@ -516,8 +516,8 @@ var frameMenu = {
         [
             {
                 icon: "#info",
-                label: "frame_info",
-                action: function() {console.log("frame_info");}
+                label: "view_frame_info",
+                action: function() {console.log("view_frame_info");}
             }
         ],
         null

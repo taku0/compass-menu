@@ -1,6 +1,6 @@
-<svg version="1.1" id="menu" class="supress-compass-menu" xmlns="http://www.w3.org/2000/svg" width="600px" height="300px">
+<svg version="1.1" id="menu" class="supress-compass-menu" xmlns="http://www.w3.org/2000/svg" width="700px" height="300px">
   <defs>
-    <filter id="drop-shadow" filterUnits="userSpaceOnUse" x="-250" y="-100" width="600" height="300">
+    <filter id="drop-shadow" filterUnits="userSpaceOnUse" x="-300" y="-100" width="700" height="300">
       <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>
       <feOffset in="blur" dx="0" dy="5" result="offsetBlur"/>
       <feComponentTransfer in="offsetBlur" result="offsetBlurAlpha">
@@ -268,7 +268,7 @@
     </g>
   </defs>
 
-  <g transform="translate(250, 100)">
+  <g transform="translate(300, 100)">
     <g filter="url(#drop-shadow)" opacity=".95">
       <g clip-path="url(#clip)">
         <circle id="outer" cx="50" cy="50" r="45" stroke="#C0C0C0" stroke-width="1" fill="white"/>
