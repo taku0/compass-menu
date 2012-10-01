@@ -693,6 +693,8 @@ PieMenu.states = {
         this.menu = menu;
         this.config = config;
 
+        this.menu.setVariant(0);
+
         this.menu.hide();
     },
 
