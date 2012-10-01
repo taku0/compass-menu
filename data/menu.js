@@ -819,6 +819,22 @@ PieMenu.states.ShowingState.prototype.onKeyDown = function(event) {
         event.preventDefault();
         event.stopPropagation();
     }
+
+    var isESCPressed;
+
+    console.log(event.keyCode, event.DOM_VK_ESCAPE);
+
+    if ('key' in event) {
+        isESCPressed = (event.key === "Esc");
+    } else {
+        isESCPressed = (event.keyCode === event.DOM_VK_ESCAPE);
+    }
+
+    console.log(isESCPressed);
+
+    if (isESCPressed) {
+        this.menu.state = new PieMenu.states.Initial(this.menu, this.config);
+    }
 };
 
 /**
