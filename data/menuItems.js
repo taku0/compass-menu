@@ -8,7 +8,7 @@ var pageMenu = {
             {
                 icon: "#bookmark",
                 label: "bookmark",
-                action: function() {console.log("bookmark");}
+                action: function() {requestCommand("Browser:AddBookmarkAs");}
             }
         ],
         null,
@@ -16,7 +16,7 @@ var pageMenu = {
             {
                 icon: "#save",
                 label: "save_page",
-                action: function() {console.log("save");}
+                action: function() {requestCommand("Browser:SavePage");}
 
             }
         ],
@@ -25,7 +25,7 @@ var pageMenu = {
             {
                 icon: "#source",
                 label: "view_page_source",
-                action: function() {console.log("view_page_source");}
+                action: function() {requestCommand("View:PageSource");}
             }
         ],
         null,
@@ -33,7 +33,7 @@ var pageMenu = {
             {
                 icon: "#info",
                 label: "view_page_info",
-                action: function() {console.log("view_page_info");}
+                action: function() {requestCommand("View:PageInfo");}
             }
         ],
         null
@@ -48,7 +48,7 @@ var windowMenu = {
             {
                 icon: "#forward",
                 label: "view_next_window",
-                action: function() {console.log("view_next_window");}
+                action: function() {requestActivateWindowRelative(1);}
             }
         ],
         null,
@@ -56,12 +56,12 @@ var windowMenu = {
             {
                 icon: "#stop",
                 label: "close_window",
-                action: function() {console.log("close_window");}
+                action: function() {requestCommand("cmd_closeWindow");}
             },
             {
                 icon: "#undo",
                 label: "undo_close_window",
-                action: function() {console.log("undo_close_window");}
+                action: function() {requestCommand("History:UndoCloseWindow");}
             }
         ],
         null,
@@ -69,7 +69,7 @@ var windowMenu = {
             {
                 icon: "#back",
                 label: "view_previous_window",
-                action: function() {console.log("view_previous_window");}
+                action: function() {requestActivateWindowRelative(-1);}
             }
         ],
         null,
@@ -77,12 +77,12 @@ var windowMenu = {
             {
                 icon: "#new",
                 label: "open_new_window",
-                action: function() {console.log("open_new_window");}
+                action: function() {requestCommand("cmd_newNavigator");}
             },
             {
                 icon: "#new",
                 label: "duplicate_window",
-                action: function() {console.log("duplicate_window");}
+                action: function() {requestDuplicateWindow();}
             }
         ],
         null
@@ -97,7 +97,7 @@ var tabMenu = {
             {
                 icon: "#forward",
                 label: "view_next_tab",
-                action: function() {console.log("view_next_tab");}
+                action: function() {requestCommand("Browser:NextTab");}
             }
         ],
         null,
@@ -105,12 +105,12 @@ var tabMenu = {
             {
                 icon: "#stop",
                 label: "close_tab",
-                action: function() {console.log("close_tab");}
+                action: function() {requestCommand("cmd_close");}
             },
             {
                 icon: "#undo",
                 label: "undo_close_tab",
-                action: function() {console.log("undo_close_tab");}
+                action: function() {requestCommand("History:UndoCloseTab");}
             }
         ],
         null,
@@ -118,7 +118,7 @@ var tabMenu = {
             {
                 icon: "#back",
                 label: "view_previous_tab",
-                action: function() {console.log("view_previous_tab");}
+                action: function() {requestCommand("Browser:PrevTab");}
             }
         ],
         null,
@@ -126,12 +126,12 @@ var tabMenu = {
             {
                 icon: "#new",
                 label: "open_new_tab",
-                action: function() {console.log("open_new_tab");}
+                action: function() {requestCommand("cmd_newNavigatorTab");}
             },
             {
                 icon: "#new",
                 label: "duplicate_tab",
-                action: function() {console.log("duplicate_tab");}
+                action: function() {requestDuplicateTab();}
             }
         ],
         null
@@ -147,13 +147,13 @@ var navigationMenu = {
                 icon: "#forward",
                 label: "forward",
                 classes: ["forward"],
-                action: function() {console.log("forward");}
+                action: function() {history.forward();}
             },
             {
                 icon: "#last",
                 label: "go_to_last",
                 classes: ["forward"],
-                action: function() {console.log("go_to_last");}
+                action: function() {requestGoToLast();}
             }
         ],
         [
@@ -165,19 +165,19 @@ var navigationMenu = {
                 icon: "#reload",
                 label: "reload",
                 classes: ["reload"],
-                action: function() {console.log("reload");}
+                action: function() {requestCommand("Browser:Reload");}
             },
             {
                 icon: "#reload",
                 label: "reload_without_cache",
                 classes: ["reload"],
-                action: function() {console.log("reload without cache");}
+                action: function() {requestCommand("Browser:ReloadSkipCache");}
             },
             {
                 icon: "#stop",
                 label: "stop",
                 classes: ["stop"],
-                action: function() {console.log("stop");}
+                action: function() {requestCommand("Browser:Stop");}
             }
         ],
         null, // developer menu?
@@ -186,13 +186,13 @@ var navigationMenu = {
                 icon: "#back",
                 label: "back",
                 classes: ["back"],
-                action: function() {console.log("back");}
+                action: function() {history.back();}
             },
             {
                 icon: "#first",
                 label: "go_to_first",
                 classes: ["back"],
-                action: function() {console.log("go_to_first");}
+                action: function() {requestGoToFirst();}
             }
         ],
         [
@@ -202,12 +202,13 @@ var navigationMenu = {
             {
                 icon: "#up",
                 label: "up",
-                action: function() {console.log("up");}
+                classes: ["up"],
+                action: function() {requestGoUp();}
             },
             {
                 icon: "#open_location",
                 label: "open_location",
-                action: function() {console.log("open_location");}
+                action: function() {requestCommand("Browser:OpenLocation");}
             }
         ],
         [
@@ -238,12 +239,20 @@ var selectionMenu = {
             {
                 icon: "#open_link",
                 label: "open_selection",
-                action: function() {console.log("open_selection");}
+                action: function() {
+                    var selection = window.getSelection();
+
+                    requestOpenURLInCurrentTab(selection.toString());
+                }
             },
             {
                 icon: "#open_link",
                 label: "open_selection_in_new_tab",
-                action: function() {console.log("open_selection_in_new_tab");}
+                action: function() {
+                    var selection = window.getSelection();
+
+                    requestOpenURLInNewTab(selection.toString());
+                }
             }
         ],
         [
@@ -257,12 +266,20 @@ var selectionMenu = {
             {
                 icon: "#search",
                 label: "search_the_web",
-                action: function() {console.log("search_the_web");}
+                action: function() {
+                    var selection = window.getSelection();
+
+                    requestSearchWeb(selection.toString(), false);
+                }
             },
             {
                 icon: "#search",
                 label: "search_the_web_in_new_tab",
-                action: function() {console.log("search_the_web_in_new_tab");}
+                action: function() {
+                    var selection = window.getSelection();
+
+                    requestSearchWeb(selection.toString(), true);
+                }
             }
         ],
         [
@@ -272,7 +289,7 @@ var selectionMenu = {
             {
                 icon: "#copy",
                 label: "copy_selection",
-                action: function() {console.log("search_web");}
+                action: function() {requestCommand("cmd_copy");}
             }
         ],
         [
@@ -289,12 +306,20 @@ var imageMenu = {
             {
                 icon: "#open_link",
                 label: "view_image",
-                action: function() {console.log("view_image");}
+                action: function(menu) {
+                    var url = menu.target.src;
+
+                    requestOpenURLInCurrentTab(url);
+                }
             },
             {
                 icon: "#open_link",
                 label: "view_image_in_new_tab",
-                action: function() {console.log("view_image_in_new_tab");}
+                action: function(menu) {
+                    var url = menu.target.src;
+
+                    requestOpenURLInNewTab(url);
+                }
             }
         ],
         [
@@ -304,7 +329,11 @@ var imageMenu = {
             {
                 icon: "#save",
                 label: "save_image",
-                action: function() {console.log("save_image");}
+                action: function(menu) {
+                    var url = menu.target.src;
+
+                    requestSaveImageURL(url, location.toString());
+                }
             }
         ],
         [
@@ -318,7 +347,11 @@ var imageMenu = {
             {
                 icon: "#copy",
                 label: "copy_image_location",
-                action: function() {console.log("copy_image_location");}
+                action: function(menu) {
+                    var url = menu.target.src;
+
+                    requestCopyText(url);
+                }
             }
             // copy image?
         ],
@@ -353,7 +386,11 @@ var linkMenu = {
             {
                 icon: "#open_link",
                 label: "open_link_in_new_tab",
-                action: function() {console.log("open_link_in_new_tab");}
+                action: function(menu) {
+                    var url = extractLinkURL(menu.target);
+
+                    requestOpenURLInNewTab(url);
+                }
             }
         ],
         [
@@ -363,7 +400,11 @@ var linkMenu = {
             {
                 icon: "#save",
                 label: "save_link",
-                action: function() {console.log("save_link");}
+                action: function(menu) {
+                    var url = extractLinkURL(menu.target);
+
+                    requestSaveURL(url);
+                }
             }
         ],
         [
@@ -373,7 +414,11 @@ var linkMenu = {
             {
                 icon: "#open_link",
                 label: "open_link_in_new_window",
-                action: function() {console.log("open_link_in_new_window");}
+                action: function(menu) {
+                    var url = extractLinkURL(menu.target);
+
+                    requestOpenURLInNewWindow(url);
+                }
             }
         ],
         [
@@ -383,7 +428,11 @@ var linkMenu = {
             {
                 icon: "#copy",
                 label: "copy_location",
-                action: function() {console.log("copy_location");}
+                action: function(menu) {
+                    var url = extractLinkURL(menu.target);
+
+                    requestCopyText(url);
+                }
             }
         ],
         [
@@ -423,7 +472,7 @@ var textMenu = {
             {
                 icon: "#copy",
                 label: "copy_text",
-                action: function() {console.log("copy_text");}
+                action: function() {requestCommand("cmd_copy");}
             }
         ],
         [
@@ -433,7 +482,7 @@ var textMenu = {
             {
                 icon: "#paste",
                 label: "paste_text",
-                action: function() {console.log("paste_text");}
+                action: function() {requestCommand("cmd_paste");}
             }
         ],
         [
@@ -443,7 +492,7 @@ var textMenu = {
             {
                 icon: "#cut",
                 label: "cut_text",
-                action: function() {console.log("cut_text");}
+                action: function() {requestCommand("cmd_cut");}
             }
         ],
         [
@@ -453,12 +502,12 @@ var textMenu = {
             {
                 icon: "#undo",
                 label: "undo_text",
-                action: function() {console.log("undo_text");}
+                action: function() {requestCommand("cmd_undo");}
             },
             {
                 icon: "#redo",
                 label: "redo_text",
-                action: function() {console.log("redo_text");}
+                action: function() {requestCommand("cmd_redo");}
             }
         ],
         [
@@ -475,31 +524,37 @@ var frameMenu = {
             {
                 icon: "#open_link",
                 label: "view_frame",
-                action: function() {console.log("view_frame");}
+                action: function() {
+                    requestOpenURLInCurrentTab(location.toString());
+                }
             },
             {
                 icon: "#open_link",
                 label: "view_frame_in_new_tab",
-                action: function() {console.log("view_frame_in_new_tab");}
+                action: function() {
+                    requestOpenURLInNewTab(location.toString());
+                }
             }
         ],
         [
             {
                 icon: "#reload",
                 label: "reload_frame",
-                action: function() {console.log("reload_frame");}
+                action: function() {location.reload();}
             },
             {
                 icon: "#reload",
                 label: "reload_frame_without_cache",
-                action: function() {console.log("reload_frame_without_cache");}
+                action: function() {location.reload(true);}
             }
         ],
         [
             {
                 icon: "#save",
                 label: "save_frame",
-                action: function() {console.log("save_frame");}
+                action: function() {
+                    requestSaveURL(location.toString());
+                }
             }
         ],
         null,
@@ -507,7 +562,9 @@ var frameMenu = {
             {
                 icon: "#source",
                 label: "view_frame_source",
-                action: function() {console.log("view_frame_source");}
+                action: function() {
+                    requestShowFrameSource();
+                }
             }
         ],
         [
@@ -517,7 +574,9 @@ var frameMenu = {
             {
                 icon: "#info",
                 label: "view_frame_info",
-                action: function() {console.log("view_frame_info");}
+                action: function() {
+                    requestShowFrameInfo();
+                }
             }
         ],
         null
@@ -552,6 +611,233 @@ var contexts = {
     text: textMenu.children,
     frame: frameNavigationMenu.children
 };
+
+/**
+ * Evaluates an XPath expression and Returns the result.
+ *
+ * If a number, string, or boolean result type is specified,
+ * the result is converted to a JavaScript primitive value.
+ *
+ * If the FIRST_ORDERED_NODE_TYPE is specified as a result type,
+ * the result is the single node value.
+ *
+ * @param {string} xpath An XPath expression.
+ * @param {Node} node The context node for the query.
+ * @param {number=} resultType A constant values indicating result type
+ *     defined at XPathResult.
+ * @return {*} Result of the XPath expression.
+ */
+function evaluateXPath(xpath, node, resultType) {
+    var document = node.ownerDocument || node;
+    var documentElement = document.documentElement;
+    var namespaceResolver =
+        document.createNSResolver(documentElement);
+
+    resultType = resultType || XPathResult.ANY_TYPE;
+
+    var result =  document.evaluate(xpath,
+                                    node,
+                                    namespaceResolver,
+                                    resultType,
+                                    null);
+
+    switch (resultType) {
+    case XPathResult.NUMBER_TYPE:
+        return result.numberValue;
+    case XPathResult.STRING_TYPE:
+        return result.stringValue;
+    case XPathResult.BOOLEAN_TYPE:
+        return result.booleanValue;
+    case XPathResult.FIRST_ORDERED_NODE_TYPE:
+        return result.singleNodeValue;
+    default:
+        return result;
+    }
+}
+
+/**
+ * @return {string} The link target URL of the node.
+ *
+ * @param {Node} node A descendant node of anchor nodes.
+ */
+function extractLinkURL(node) {
+    var anchorNode =
+        evaluateXPath("(ancestor-or-self::a | ancestor-or-self::area)[@href]",
+                      node,
+                      XPathResult.FIRST_ORDERED_NODE_TYPE);
+
+    // The href property returns always a valid (i.e. not a relative) URL.
+    return anchorNode.href;
+}
+
+/**
+ * Requests the add-on to execute a XUL command (e.g. cmd_copy, Browser:Reload).
+ *
+ * The function is asynchronous.
+ *
+ * @param {string} commandName The name of the command to be executed.
+ */
+function requestCommand(commandName) {
+    self.port.emit("requestCommand", commandName);
+}
+
+/**
+ * Requests the add-on to activate another window.
+ *
+ * The function is asynchronous.
+ *
+ * @param {number} offset A relative index of the window to be activated.
+ *     The index of the current window is 0.
+ */
+function requestActivateWindowRelative(offset) {
+    self.port.emit("requestActivateWindowRelative", offset);
+}
+
+/**
+ * Requests the add-on to open a URL in the current tab.
+ *
+ * Note that if the page is in a frame,
+ * location = url only change the location of the frame.
+ *
+ * The function is asynchronous.
+ *
+ * @param {string} url a URL to be opened.
+ */
+function requestOpenURLInCurrentTab(url) {
+    self.port.emit("requestOpenURLInCurrentTab", url);
+}
+
+/**
+ * Requests the add-on to open a URL in a new window.
+ *
+ * The function is asynchronous.
+ *
+ * @param {string} url a URL to be opened.
+ */
+function requestOpenURLInNewWindow(url) {
+    self.port.emit("requestOpenURLInNewWindow", url);
+}
+
+/**
+ * Requests the add-on to open a URL in a new tab.
+ *
+ * The function is asynchronous.
+ *
+ * @param {string} url a URL to be opened.
+ */
+function requestOpenURLInNewTab(url) {
+    self.port.emit("requestOpenURLInNewTab", url);
+}
+
+/**
+ * Requests the add-on to duplicate the current window.
+ *
+ * The function is asynchronous.
+ */
+function requestDuplicateWindow() {
+    self.port.emit("requestDuplicateWindow");
+}
+
+/**
+ * Requests the add-on to duplicate the current tab.
+ *
+ * The function is asynchronous.
+ */
+function requestDuplicateTab() {
+    self.port.emit("requestDuplicateTab");
+}
+
+/**
+ * Requests the add-on to go to the first page in the history.
+ *
+ * The function is asynchronous.
+ */
+function requestGoToFirst() {
+    self.port.emit("requestGoToFirst");
+}
+
+/**
+ * Requests the add-on to go to the last page in the history.
+ *
+ * The function is asynchronous.
+ */
+function requestGoToLast() {
+    self.port.emit("requestGoToLast");
+}
+
+/**
+ * Requests the add-on to search the web.
+ *
+ * The function is asynchronous.
+ *
+ * @param {string} searchText A string to search.
+ * @param {boolean} useNewTab If true, search in a new tab.
+ */
+function requestSearchWeb(searchText, useNewTab) {
+    self.port.emit("requestSearchWeb", searchText, useNewTab);
+}
+
+/**
+ * Requests the add-on to go up path hierarchy.
+ *
+ * The function is asynchronous.
+ */
+function requestGoUp() {
+    self.port.emit("requestGoUp");
+}
+
+/**
+ * Requests the add-on to save a URL.
+ *
+ * The function is asynchronous.
+ *
+ * @param {string} url A URL to be saved.
+ * @param {string} referrer A URL of the referrer.
+ */
+function requestSaveURL(url, referrer) {
+    self.port.emit("requestSaveURL", url, referrer);
+}
+
+/**
+ * Requests the add-on to save an image URL.
+ *
+ * The function is asynchronous.
+ *
+ * @param {string} url A URL to be saved.
+ * @param {string} referrer A URL of the referrer.
+ */
+function requestSaveImageURL(url, referrer) {
+    self.port.emit("requestSaveImageURL", url, referrer);
+}
+
+/**
+ * Requests the add-on to copy text.
+ *
+ * The function is asynchronous.
+ *
+ * @param {string} text A string to be copied
+ */
+function requestCopyText(text) {
+    self.port.emit("requestCopyText", text);
+}
+
+/**
+ * Requests the add-on to show the frame source.
+ *
+ * The function is asynchronous.
+ */
+function requestShowFrameSource() {
+    self.port.emit("requestShowFrameSource");
+}
+
+/**
+ * Requests the add-on to show the frame information.
+ *
+ * The function is asynchronous.
+ */
+function requestShowFrameInfo() {
+    self.port.emit("requestShowFrameInfo");
+}
 
 /**
  * @return {boolean} true if the variant has the given class name.
@@ -592,6 +878,7 @@ function hideIfClassOf(menuItem, className) {
  * @param {Object.<string, *>} config An configurations.
  * @return {types.MenuItem} The new menu item.
  */
+// FIXME graying out instead of removing?
 function hideBackIfFirst(target, pageState, menuItem, config) {
     if (pageState.isFirst) {
         return hideIfClassOf(menuItem, "back");
@@ -610,9 +897,29 @@ function hideBackIfFirst(target, pageState, menuItem, config) {
  * @param {Object.<string, *>} config An configurations.
  * @return {types.MenuItem} The new menu item.
  */
+// FIXME graying out instead of removing?
 function hideForwardIfLast(target, pageState, menuItem, config) {
     if (pageState.isLast) {
         return hideIfClassOf(menuItem, "forward");
+    } else {
+        return menuItem;
+    }
+}
+
+/**
+ * Returns an empty array if the menu item is a go up menu and
+ * the URL path is at the root.
+ *
+ * @param {Node} target The target node.
+ * @param {types.PageState} pageState The state of the page.
+ * @param {types.MenuItem} menuItem The original menu item.
+ * @param {Object.<string, *>} config An configurations.
+ * @return {types.MenuItem} The new menu item.
+ */
+// FIXME graying out instead of removing?
+function hideGoUpIfTop(target, pageState, menuItem, config) {
+    if (pageState.isTop) {
+        return hideIfClassOf(menuItem, "up");
     } else {
         return menuItem;
     }
@@ -644,5 +951,6 @@ function chooseReloadOrStop(target, pageState, menuItem, config) {
 var menuFilters = [
     hideBackIfFirst,
     hideForwardIfLast,
+    hideGoUpIfTop,
     chooseReloadOrStop
 ];

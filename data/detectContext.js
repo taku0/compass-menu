@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- * @return {function(Node): boolean} A function takes node and returns true if
+ * @return {function(Node): boolean} A function takes node and returns true iff
  *     the given XPath evalutes true
  * @param {string} xpath A XPath expression to be evaluated.
  */
@@ -21,7 +21,7 @@ function xPathDetector(xpath) {
 }
 
 /**
- * @return {boolean} true if the selection is not empty
+ * @return {boolean} true iff the selection is not empty
  */
 function isSelected(node) {
     var document = node.ownerDocument;
@@ -31,7 +31,7 @@ function isSelected(node) {
 }
 
 /**
- * @return {boolean} true if the given node is in a frame
+ * @return {boolean} true iff the given node is in a frame
  */
 function isInFrame(node) {
     var document = node.ownerDocument;

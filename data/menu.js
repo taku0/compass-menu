@@ -26,7 +26,7 @@ var types = types || {};
  *
  * @typedef {{icon: string,
  *            label: string,
- *            action: ?function(),
+ *            action: ?function(PieMenu),
  *            classes: ?Array.<string>
  *            children: ?Array.<types.MenuItem>}}
  */
@@ -376,7 +376,7 @@ PieMenu.prototype.getVariant = function(index) {
 };
 
 /**
- * @return {boolean} true if the menu item at given index has submenus.
+ * @return {boolean} true iff the menu item at given index has submenus.
  *
  * @param {number} index The index of the menu item.
  */
@@ -411,6 +411,10 @@ PieMenu.prototype.openAt = function(center, items, target, pageState) {
 
     if (target) {
         this.target = target;
+
+        // To get keypress events for alt keys.
+        target.ownerDocument.defaultView.focus();
+        target.focus();
     } else {
         target = this.target;
     }
@@ -560,7 +564,10 @@ PieMenu.prototype.activateItemAt = function(point) {
         var variant = this.getVariant(index);
 
         if (variant && variant.action) {
-            variant.action();
+            // Since some commands assume the current frame is the frame
+            // containing the target node.
+            this.target.ownerDocument.defaultView.focus();
+            variant.action(this);
         }
     }
 };
@@ -895,7 +902,7 @@ function getMouseButton(event) {
 
 /**
  * @return {boolean}
- *     true if the right button and required modifiers is pressed.
+ *     true iff the right button and required modifiers is pressed.
  * @param {MouseEvent} The mouse event object.
  * @protected
  */
@@ -1091,7 +1098,7 @@ function onPageState(message) {
  */
 function getNumberedElements(ownerDocument, prefix) {
     return [ownerDocument.getElementById(prefix + i)
-            for (i in range(0, 8))];
+            for each (i in range(0, 8))];
 }
 
 //// Initialization functions
@@ -1120,7 +1127,7 @@ function createTextSetters(ownerDocument) {
      * @param {Node} circleStrokeElement
      *     The element drawing the outline of the opposite side of the tail.
      * @param {boolean} isLeftToRight
-     *     true if the text is from left to right.
+     *     true iff the text is from left to right.
      */
     function textSetter(balloonElement,
                         textElement,
@@ -1225,7 +1232,7 @@ function createTextSetters(ownerDocument) {
                    rectFillElements[i], rectStrokeElements[i],
                    circleFillElements[i], circleStrokeElements[i],
                    isLeftToRights[i])
-        for (i in range(0, 8))
+        for each (i in range(0, 8))
     ];
 }
 
