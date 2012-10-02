@@ -866,6 +866,20 @@ PieMenu.states.ShowingState.prototype.onScroll = function(event) {
 //// Initial state methods
 
 /**
+ * Handles context events.
+ *
+ * Prevents the default if opens the menu.
+ *
+ * @param {Event} The event object.
+ */
+PieMenu.states.Initial.prototype.onContextMenu = function(event) {
+    if (this.isOpenButton(event) && !this.isSupressed(event)) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+};
+
+/**
  * Handles mousedown events.
  *
  * If the correct button and modifiers is pressed, opens the menu and
@@ -1329,7 +1343,7 @@ function initialize(event) {
      */
     var config = {
         /** The mouse button to open the menu. */
-        openButton: 0,
+        openButton: 2,
 
         /** If true, opens the menu only if Ctrl key is pressed.  */
         requireCtrl: false,
