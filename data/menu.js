@@ -897,10 +897,11 @@ PieMenu.states.Initial.prototype.onMouseDown = function(event) {
 
             menu.container.style.display = 'inline';
             menu.openAt(point, menu.contexts[context], event.target, pageState);
-            menu.state = new PieMenu.states.Pressed(menu, config);
         };
 
         queryPageState(openMenu);
+
+        menu.state = new PieMenu.states.Pressed(menu, config);
 
         event.preventDefault();
         event.stopPropagation();
@@ -926,7 +927,6 @@ function getMouseButton(event) {
 
     return button;
 }
-
 
 /**
  * @return {boolean}
@@ -994,15 +994,6 @@ PieMenu.states.Pressed.prototype.onScroll = function(event) {
 };
 
 /**
- * Handles mousedown events.
- *
- * @param {MouseEvent} The mouse event object.
- */
-PieMenu.states.Pressed.prototype.onMouseDown = function(event) {
-    PieMenu.states.ShowingState.prototype.onMouseDown.call(this, event);
-};
-
-/**
  * Handles mouseup events.
  *
  * Transits to the Released state if the button opened the menu is released.
@@ -1012,6 +1003,8 @@ PieMenu.states.Pressed.prototype.onMouseDown = function(event) {
 PieMenu.states.Pressed.prototype.onMouseUp = function(event) {
     if (getMouseButton(event) == this.config.openButton) {
         this.menu.state = new PieMenu.states.Released(this.menu, this.config);
+        event.preventDefault();
+        event.stopPropagation();
     } else {
         PieMenu.states.ShowingState.prototype.onMouseUp.call(this, event);
     }
@@ -1034,6 +1027,8 @@ PieMenu.states.Moved.prototype.onMouseUp = function(event) {
 
         this.menu.activateItemAt(point);
         this.menu.state = new PieMenu.states.Initial(this.menu, this.config);
+        event.preventDefault();
+        event.stopPropagation();
     } else {
         PieMenu.states.ShowingState.prototype.onMouseUp.call(this, event);
     }
@@ -1051,8 +1046,9 @@ PieMenu.states.Moved.prototype.onMouseUp = function(event) {
 PieMenu.states.Released.prototype.onMouseDown = function(event) {
     var button = getMouseButton(event);
 
-    this.menu.state
-        = new PieMenu.states.Moved(this.menu, this.config, button);
+    this.menu.state = new PieMenu.states.Moved(this.menu, this.config, button);
+    event.preventDefault();
+    event.stopPropagation();
 };
 
 //// Miscellaneous functions
