@@ -962,7 +962,11 @@ PieMenu.states.Initial.prototype.isSupressed = function(event) {
     var supressedByShift =
         this.config.isShiftSupress && event.shiftKey;
 
-    return supressedByCtrl && supressedByShift;
+    if (this.config.isCtrlSupress && this.config.isShiftSupress) {
+        return supressedByCtrl && supressedByShift;
+    } else {
+        return supressedByCtrl || supressedByShift;
+    }
 };
 
 //// Pressed state methods
@@ -1365,7 +1369,7 @@ function initialize(event) {
          * If both isCtrlSupress and isShiftSupress is true,
          * does not open the menu if both Ctrl and Shift key is pressed.
          */
-        isShiftSupress: false,
+        isShiftSupress: true,
 
         /**
          * The delay in milliseconds from opening the menu to
