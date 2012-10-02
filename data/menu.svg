@@ -1,4 +1,4 @@
-<svg version="1.1" id="menu" class="supress-compass-menu" xmlns="http://www.w3.org/2000/svg" width="700px" height="300px">
+<svg version="1.1" id="menu" class="supress-compass-menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="700px" height="300px">
   <defs>
     <filter id="drop-shadow" filterUnits="userSpaceOnUse" x="-300" y="-100" width="700" height="300">
       <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>
