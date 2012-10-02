@@ -1298,6 +1298,8 @@ function initialize(event) {
     iframe.style.outline = "none";
     iframe.style.backgroundColor = "transparent";
     iframe.style.position = "absolute";
+    iframe.style.margin = "0";
+    iframe.style.padding = "0";
 
     document.body.appendChild(iframe);
 
