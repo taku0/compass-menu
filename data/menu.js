@@ -105,7 +105,7 @@ types.MenuFilter = null;
  *     An map from context names to arrays of menu items.
  * @param {Array.<types.MenuFilter>} menuFilters
  *     An array of menu filters.
- * @param {Object.<string, *>} config An configurations.
+ * @param {Object.<string, *>} config A configuration.
  * @param {Object.<string, string>} localizedLabels
  *   An map from label keys to localized label strings.
  */
@@ -589,6 +589,16 @@ PieMenu.prototype.setVariant = function(variantIndex) {
     this.variantIndex = variantIndex;
     this.updateIcons();
     this.updateLabelTextsIfVisible();
+};
+
+/**
+ * Sets a configuration.
+ *
+ * @param {Object.<string, *>} config A configuration.
+ */
+PieMenu.prototype.setConfig = function(config) {
+    this.config = config;
+    this.state.config = config;
 };
 
 /**
@@ -1339,38 +1349,7 @@ function initialize(event) {
     /**
      * The configuration of the add-on.
      */
-    var config = {
-        /** The mouse button to open the menu. */
-        openButton: 2,
-
-        /** If true, opens the menu only if Ctrl key is pressed.  */
-        requireCtrl: false,
-
-        /** If true, opens the menu only if Shift key is pressed.  */
-        requireShift: false,
-
-        /**
-         * If true, does not open the menu if Ctrl key is pressed.
-         *
-         * If both isCtrlSupress and isShiftSupress is true,
-         * does not open the menu if both Ctrl and Shift key is pressed.
-         */
-        isCtrlSupress: false,
-
-        /**
-         * If true, does not open the menu if Shift key is pressed.
-         *
-         * If both isCtrlSupress and isShiftSupress is true,
-         * does not open the menu if both Ctrl and Shift key is pressed.
-         */
-        isShiftSupress: true,
-
-        /**
-         * The delay in milliseconds from opening the menu to
-         * showing the labels.
-         */
-        labelDelay: 1000
-    };
+    var config = self.options.config;
 
     var menu = new PieMenu(iframe,
                            menuNode,
@@ -1384,7 +1363,13 @@ function initialize(event) {
                            config,
                            self.options.localizedLabels);
 
+    self.port.on("configChanged", menu.setConfig.bind(menu));
+
     menu.onMouseDown(event);
 }
 
 window.addEventListener("mousedown", initialize, true);
+
+self.port.on("configChanged", function(config) {
+                 self.options.config = config;
+             });
