@@ -62,9 +62,7 @@ var contextDetectors = [
  * @return {string} The context of the node.
  */
 function detectContext(node) {
-    for (var i = 0; i < contextDetectors.length; i++) {
-        var detector = contextDetectors[i];
-
+    for (let detector of contextDetectors) {
         if (detector.detector(node)) {
             return detector.context;
         }

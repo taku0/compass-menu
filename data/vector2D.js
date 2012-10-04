@@ -26,41 +26,23 @@ function Vector2D() {
 }
 
 Vector2D.prototype = {
-    plus: function(other) {
-        return new Vector2D(this.x + other.x, this.y + other.y);
-    },
+    plus: function(other) new Vector2D(this.x + other.x, this.y + other.y),
 
-    scale: function(factor) {
-        return new Vector2D(factor * this.x, factor * this.y);
-    },
+    scale: function(factor) new Vector2D(factor * this.x, factor * this.y),
 
-    diff: function(other) {
-        return new Vector2D(this.x - other.x, this.y - other.y);
-    },
+    diff: function(other) new Vector2D(this.x - other.x, this.y - other.y),
 
-    nagate: function() {
-        return new Vector2D(-this.x, -this.y);
-    },
+    nagate: function() new Vector2D(-this.x, -this.y),
 
-    normSquared: function() {
-        return this.x * this.x + this.y * this.y;
-    },
+    normSquared: function() this.x * this.x + this.y * this.y,
 
-    norm: function() {
-        return Math.sqrt(this.normSquared());
-    },
+    norm: function() Math.sqrt(this.normSquared()),
 
-    distanceSquared: function(other) {
-        return this.diff(other).normSquared();
-    },
+    distanceSquared: function(other) this.diff(other).normSquared(),
 
-    distance: function(other) {
-        return Math.sqrt(this.distanceSquared());
-    },
+    distance: function(other) Math.sqrt(this.distanceSquared()),
 
-    normalize: function() {
-        return this.scale(1.0 / this.norm());
-    },
+    normalize: function() this.scale(1.0 / this.norm()),
 
     applyTransform: function(matrix) {
         var x = matrix.a * this.x + matrix.c * this.y + matrix.e;

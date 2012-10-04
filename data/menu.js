@@ -138,14 +138,6 @@ function PieMenu(container, menuNode, outer, hole,
     this.lastPoint = null;
     this.labelTimerID = null;
 
-    var self = this;
-
-    function bindThis(f) {
-        return function() {
-            f.apply(self, arguments);
-        };
-    }
-
     var containerWindow = container.ownerDocument.defaultView;
     var menuWindow = menuNode.ownerDocument.defaultView;
 
@@ -158,13 +150,13 @@ function PieMenu(container, menuNode, outer, hole,
     }
 
     function registerEventListener(win) {
-        win.addEventListener("mousedown", bindThis(this.onMouseDown), true);
-        win.addEventListener("mouseup", bindThis(this.onMouseUp), true);
-        win.addEventListener("mousemove", bindThis(this.onMouseMove), true);
-        win.addEventListener("scroll", bindThis(this.onScroll), true);
-        win.addEventListener("keydown", bindThis(this.onKeyDown), true);
-        win.addEventListener("keyup", bindThis(this.onKeyUp), true);
-        win.addEventListener("contextmenu", bindThis(this.onContextMenu), true);
+        win.addEventListener("mousedown", this.onMouseDown.bind(this), true);
+        win.addEventListener("mouseup", this.onMouseUp.bind(this), true);
+        win.addEventListener("mousemove", this.onMouseMove.bind(this), true);
+        win.addEventListener("scroll", this.onScroll.bind(this), true);
+        win.addEventListener("keydown", this.onKeyDown.bind(this), true);
+        win.addEventListener("keyup", this.onKeyUp.bind(this), true);
+        win.addEventListener("contextmenu", this.onContextMenu.bind(this), true);
     }
 
     windows.forEach(registerEventListener, this);
@@ -321,7 +313,8 @@ PieMenu.prototype.moveBy = function(movement) {
 };
 
 /**
- * @return {types.MenuItem} The nearest menu item to the mouse cursor position.
+ * @return {number} The index of the nearest menu item to
+ *     the mouse cursor position.
  *
  * @param {{x: number, y: number}} point The mouse cursor position,
  *     in the user coordinates.
@@ -482,12 +475,8 @@ PieMenu.prototype.updateIcons = function() {
 PieMenu.prototype.resetLabelTimer = function() {
     this.clearLabelTimer();
 
-    var self = this;
-
     this.labelTimerID =
-        setTimeout(function() {
-                       self.updateLabelTexts();
-                   }, this.config.labelDelay);
+        setTimeout(this.updateLabelTexts.bind(this), this.config.labelDelay);
 };
 
 /**
@@ -503,9 +492,7 @@ PieMenu.prototype.clearLabelTimer = function() {
  * Hides label texts.
  */
 PieMenu.prototype.hideLabelTexts = function() {
-    for (var i = 0; i < 8; i++) {
-        var textSetter = this.textSetters[i];
-
+    for (let textSetter of this.textSetters) {
         textSetter(null);
     }
     this.labelVisible = false;
@@ -771,8 +758,7 @@ PieMenu.states.Released.prototype = new PieMenu.states.ShowingState();
  */
 PieMenu.states.ShowingState.prototype.onMouseMove = function(event) {
     var clientToUser = this.menu.getClientToUser();
-    var point =
-        this.menu.getClientPosition(event).applyTransform(clientToUser);
+    var point = this.menu.getClientPosition(event).applyTransform(clientToUser);
 
     this.menu.follow(point);
     this.menu.resetLabelTimer();
@@ -1173,35 +1159,39 @@ function createTextSetters(ownerDocument) {
                         rectFillElement, rectStrokeElement,
                         circleFillElement, circleStrokeElement,
                         isLeftToRight) {
+        function doSetText(text) {
+            balloonElement.style.display = 'inline';
+            textElement.style.display = 'inline';
+
+            textElement.textContent = text;
+
+            var boundingBox = getBoundingBox(textElement);
+            var widthText = boundingBox.width.toString();
+
+            rectFillElement.setAttribute("width", widthText);
+            rectStrokeElement.setAttribute("width", widthText);
+
+            if (isLeftToRight) {
+                var left = textElement.x.baseVal.getItem(0).value;
+                var x = left + boundingBox.width;
+
+                circleFillElement.setAttribute("cx", x);
+                circleStrokeElement.setAttribute("cx", x);
+            } else {
+                var right = textElement.x.baseVal.getItem(0).value;
+                var x = right - boundingBox.width;
+
+                circleFillElement.setAttribute("cx", x);
+                circleStrokeElement.setAttribute("cx", x);
+
+                rectFillElement.setAttribute("x", x);
+                rectStrokeElement.setAttribute("x", x);
+            }
+        }
+
         return function(text) {
             if (text) {
-                balloonElement.style.display = 'inline';
-                textElement.style.display = 'inline';
-
-                textElement.textContent = text;
-
-                var boundingBox = getBoundingBox(textElement);
-                var widthText = boundingBox.width.toString();
-
-                rectFillElement.setAttribute("width", widthText);
-                rectStrokeElement.setAttribute("width", widthText);
-
-                if (isLeftToRight) {
-                    var left = textElement.x.baseVal.getItem(0).value;
-                    var x = left + boundingBox.width;
-
-                    circleFillElement.setAttribute("cx", x);
-                    circleStrokeElement.setAttribute("cx", x);
-                } else {
-                    var right = textElement.x.baseVal.getItem(0).value;
-                    var x = right - boundingBox.width;
-
-                    circleFillElement.setAttribute("cx", x);
-                    circleStrokeElement.setAttribute("cx", x);
-
-                    rectFillElement.setAttribute("x", x);
-                    rectStrokeElement.setAttribute("x", x);
-                }
+                doSetText(text);
             } else {
                 balloonElement.style.display = 'none';
                 textElement.style.display = 'none';
