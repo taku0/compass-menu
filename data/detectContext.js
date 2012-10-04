@@ -1,3 +1,21 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+/*
+ * Functions detect the context of the menu.
+ * 
+ * The main function is detectContext.
+ * The context is detected with detector functions.
+ * Detector functions takes a node and returns boolean.
+ * Detector functions are applied to the node in sequence and 
+ * the associated context name of the detector function returning true first
+ * is returned.
+ * Typical detector function uses XPath returning boolean.
+ */
+
 "use strict";
 
 /**
@@ -60,6 +78,7 @@ var contextDetectors = [
 
 /**
  * @return {string} The context of the node.
+ * @param {Node} node A node on which the menu opens.
  */
 function detectContext(node) {
     for (let detector of contextDetectors) {

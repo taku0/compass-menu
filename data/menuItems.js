@@ -1,3 +1,26 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+/*
+ * The menu definition.
+ * 
+ * There are several menus, one for each contexts.
+ * Each menu is an array of menu item while a menu item is 
+ * an array of variants.
+ * Variants are primary variant and secondary variant.
+ * Pressing alt select secondary variant.
+ * See also types.Variant for detail.
+ * 
+ * Null menu item represents empty item.
+ * 
+ * The menu items are filtered by menu filters.
+ * Menu filters tweak the menu item; it hides the disabled menu or 
+ * replace menu items depend on page state.
+ */
+
 "use strict";
 
 var pageMenu = {

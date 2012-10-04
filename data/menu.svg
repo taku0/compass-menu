@@ -1,3 +1,40 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<!-- The menu skin.
+   -
+   - The menu consis of several parts:
+   -  - icons
+   -  - base
+   -  - baloons
+   -  - markers
+   -  - items
+   -  - shadow text
+   -  - texts
+   -
+   - Icons are defined as symbols and referred from items.
+   -
+   - The base is the base doughnut of the menu.
+   - The base consists of the outer circle clipped with a path and
+   - the innner hole.
+   -
+   - Balloons are backgrounds and borders of the menu label.
+   - The backgrounds and borders are represented with separate objects, i.e.
+   - four background objects and four border objects for each balloon.
+   - Backgrounds or borders consists of tail, circle, rectangle,
+   - and another circle.
+   -
+   - The base and the balloons have shadows and opacity 0.95.
+   -
+   - Markers denote the items have children.
+   -
+   - Items are reference to icons.
+   -
+   - Shadow text is a hidden text used to measure the size of texts.
+   -
+   - Texts are labels.
+   -
+   - Balloons and texts are generated with generate_balloon script. -->
 <svg version="1.1" id="menu" class="supress-compass-menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="700px" height="300px">
   <defs>
     <filter id="drop-shadow" filterUnits="userSpaceOnUse" x="-300" y="-100" width="700" height="300">
@@ -18,19 +55,19 @@
   </defs>
   <defs>
     <g id="back">
-      <g> 
+      <g>
         <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="16.307" y1="10.501" x2="4.693" y2="10.501"/>
         <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" points="10.655,16.463  4.693,10.501 10.655,4.538"/>
       </g>
     </g>
     <g id="up">
-      <g> 
+      <g>
         <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="10.499" y1="16.307" x2="10.499" y2="4.693"/>
         <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" points="4.537,10.655  10.499,4.693 16.462,10.655"/>
       </g>
     </g>
     <g id="fast_back">
-      <g> 
+      <g>
         <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="17.836" y1="10.501" x2="6.842" y2="10.501"/>
         <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" points="13.622,15.15  8.974,10.501 13.622,5.852"/>
         <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" points="8.338,15.15  3.688,10.501 8.338,5.852"/>
@@ -47,14 +84,14 @@
       </g>
     </g>
     <g id="new">
-      <g> 
-        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="3.938" y1="10.501" x2="17.062" y2="10.501"/> 
+      <g>
+        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="3.938" y1="10.501" x2="17.062" y2="10.501"/>
         <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="10.501" y1="3.938" x2="10.501" y2="17.062"/>
       </g>
     </g>
     <g id="stop">
-      <g> 
-        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="5.861" y1="15.141" x2="15.141" y2="5.861"/> 
+      <g>
+        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="5.861" y1="15.141" x2="15.141" y2="5.861"/>
         <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="5.86" y1="5.859" x2="15.141" y2="15.14"/>
       </g>
     </g>
@@ -75,39 +112,39 @@
     <g id="fullscreen">
       <g>
         <g>
-          <polygon fill="#666666" points="11.499,4.454 16.546,4.452 16.546,9.501"/> 
+          <polygon fill="#666666" points="11.499,4.454 16.546,4.452 16.546,9.501"/>
           <rect x="11.586" y="6.212" transform="matrix(0.7071 0.7071 -0.7071 0.7071 9.5259 -6.6968)" fill="#666666" width="2.522" height="3.877"/>
         </g>
         <g>
-          <polygon fill="#666666" points="9.501,16.548 4.454,16.548 4.454,11.499"/> 
+          <polygon fill="#666666" points="9.501,16.548 4.454,16.548 4.454,11.499"/>
           <rect x="6.89" y="10.911" transform="matrix(-0.7075 -0.7067 0.7067 -0.7075 4.8373 27.7014)" fill="#666666" width="2.523" height="3.878"/>
         </g>
       </g>
     </g>
     <g id="first">
-      <g> 
-        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="18.129" y1="10.501" x2="6.516" y2="10.501"/> 
-        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 12.478,16.463 6.516,10.501 12.478,4.538"/> 
+      <g>
+        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="18.129" y1="10.501" x2="6.516" y2="10.501"/>
+        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 12.478,16.463 6.516,10.501 12.478,4.538"/>
         <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="5.323" y1="4.52" x2="5.323" y2="16.479"/>
       </g>
     </g>
     <g id="forward">
-      <g> 
+      <g>
         <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="4.693" y1="10.501" x2="16.307" y2="10.501"/>
         <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" points="10.345,16.463  16.307,10.501 10.345,4.538"/>
       </g>
     </g>
     <g id="fast_forward">
-      <g> 
+      <g>
         <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="3.164" y1="10.501" x2="14.158" y2="10.501"/>
         <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" points="7.378,15.15  12.026,10.501 7.378,5.852"/>
         <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" points="12.662,15.15  17.312,10.501 12.662,5.852"/>
       </g>
     </g>
     <g id="last">
-      <g> 
-        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="2.871" y1="10.501" x2="14.484" y2="10.501"/> 
-        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 8.522,16.463 14.484,10.501 8.522,4.538"/> 
+      <g>
+        <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="2.871" y1="10.501" x2="14.484" y2="10.501"/>
+        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 8.522,16.463 14.484,10.501 8.522,4.538"/>
         <line fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" x1="15.677" y1="4.52" x2="15.677" y2="16.479"/>
       </g>
     </g>
@@ -139,14 +176,14 @@
       </g>
     </g>
     <g id="source">
-      <g> 
-        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 7.94,13.579 2.988,10.501 7.94,7.421"/> 
+      <g>
+        <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 7.94,13.579 2.988,10.501 7.94,7.421"/>
         <polyline fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 13.06,7.421 18.012,10.501 13.06,13.579"/>
       </g>
     </g>
     <g id="page">
-      <g> 
-        <polygon fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 14.627,16.261 6.327,16.261 6.327,5.346 12.062,5.346 14.627,7.871"/> 
+      <g>
+        <polygon fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 14.627,16.261 6.327,16.261 6.327,5.346 12.062,5.346 14.627,7.871"/>
         <polygon fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 14.627,7.871 12.062,7.871 12.062,5.346"/>
       </g>
     </g>
@@ -179,22 +216,22 @@
       </g>
     </g>
     <g id="copy">
-      <g> 
+      <g>
         <polygon fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 13.478,17.129 5.178,17.129 5.178,6.215 7.523,6.215 7.522,14.785 13.478,14.785"/>
-        <g> 
-          <polygon fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 15.822,14.785 7.522,14.785 7.522,3.871 13.257,3.871 15.822,6.396"/> 
+        <g>
+          <polygon fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 15.822,14.785 7.522,14.785 7.522,3.871 13.257,3.871 15.822,6.396"/>
           <polygon fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 15.822,6.396 13.257,6.396 13.257,3.871"/>
         </g>
       </g>
     </g>
     <g id="paste">
-      <g> 
+      <g>
         <polygon fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 16.251,17.547 7.951,17.547 7.951,6.633 13.686,6.633 16.251,9.158"/>
         <g>
           <g>
             <path fill="#666666" d="M7.951,6.633h5.734l0.826,0.813V5.508c0-0.552-0.448-1-1-1H5.749c-0.552,0-1,0.448-1,1v9.814 c0,0.552,0.448,1,1,1h2.202V6.633z"/>
           </g>
-        </g> 
+        </g>
         <polygon fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points=" 16.251,9.158 13.686,9.158 13.686,6.633"/>
         <g>
           <path fill="#666666" d="M7.16,4.986c0,0.552,0.448,1,1,1h2.941c0.552,0,1-0.448,1-1V4.453c0-0.552-0.448-1-1-1H8.16 c-0.552,0-1,0.448-1,1V4.986z"/>
@@ -254,7 +291,7 @@
 	    </g>
     </g>
     <g id="search">
-      <g> 
+      <g>
         <circle fill="none" stroke="#666666" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" cx="8.852" cy="8.852" r="4.651"/>
         <line fill="none" stroke="#666666" stroke-width="3" stroke-miterlimit="10" x1="12.141" y1="12.141" x2="16.799" y2="16.8"/>
       </g>
