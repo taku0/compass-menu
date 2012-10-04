@@ -1300,6 +1300,7 @@ function initialize(event) {
     iframe.style.position = "absolute";
     iframe.style.margin = "0";
     iframe.style.padding = "0";
+    iframe.style.zIndex = "2147483647";
 
     document.body.appendChild(iframe);
 
