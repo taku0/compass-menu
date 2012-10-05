@@ -227,6 +227,8 @@ PieMenu.prototype.doFollow = function(point, center) {
     var movement = diff.normalize().scale(diff.norm() - this.radius);
 
     this.moveBy(movement);
+
+    this.hideLabelTexts();
 };
 
 /**
@@ -384,7 +386,8 @@ PieMenu.prototype.openAt = function(center, items, target, pageState) {
 
     this.updateIcons();
 
-    this.updateLabelTextsIfVisible();
+    this.hideLabelTexts();
+    this.resetLabelTimer();
 };
 
 /**
