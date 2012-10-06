@@ -3,7 +3,7 @@
 The CompassMenu is a extension replacing the right-click menu of Firefox with a doughnut-shaped menu.
 
 For more details, visit http://www.tatapa.org/~takuo/compass_menu/index.html
-and https://github/taku0/compass-menu
+and https://github.com/taku0/compass-menu
 
 ## Building
 
