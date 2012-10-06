@@ -225,8 +225,12 @@ function initialize(event) {
     /** The element representing the entire menu including labels */
     var menuNode = ownerDocument.getElementById("menu");
 
-    iframe.style.width = menuNode.getAttribute("width");
-    iframe.style.height = menuNode.getAttribute("height");
+    // If the page is zoomed, it seems that content size may be rounded up 
+    // while iframe size may be rounded down.
+    // I am not sure this is specified.
+    // FIXME: assuming menuNode.getAttribute("width") is in px.
+    iframe.style.width = parseInt(menuNode.getAttribute("width")) + 1 + "px";
+    iframe.style.height = parseInt(menuNode.getAttribute("height")) + 1 + "px";
 
     /** The element representing the outer ring. */
     var outer = ownerDocument.getElementById("outer");
