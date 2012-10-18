@@ -14,7 +14,7 @@
       "title": "Mouse button to open menu",
       "type": "menulist",
       "value": 2,
-      "menulist": [
+      "options": [
           {
               "value": "0",
               "label": "left_button"
