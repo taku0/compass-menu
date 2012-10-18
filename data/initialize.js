@@ -7,9 +7,35 @@
 /*
  * Initialization routines
  * 
- * Those codes bridge SVG DOM and CompassMenu class
+ * Those codes bridge the SVG DOM and the CompassMenu object
  * as well as attach the menu to the page.
- * Those codes heavily depend on details of SVG document.
+ * Those codes heavily depend on details of the SVG document.
+ *
+ * An iframe with SVG document is injected into document body.
+ * Since we should avoid slowdown of page loading as much as possible,
+ * the menu is initialized when the user presses a mouse button.
+ * 
+ * To populate iframe with SVG, we have several options:
+ * 1. iframe.contentDocument.write(svgSource);
+ * 2. iframe.contentDocument.body.innerHTML = svgSource;
+ * 3. Other DOM tree manipulations.
+ * 
+ * With option 1, the created document seems to be regarded as 
+ * a insecure document.  A mixed content warning is emitted when
+ * the page is restored from the bfcache.
+ * 
+ * With option 2 and 3, if we insert the iframe element and populate 
+ * the content in same event handler, the initial page loading starts 
+ * after returning from the event handler, so that the content is 
+ * overridden with about:blank.
+ * 
+ * Therefore, we need to insert the iframe element before mouse press events.
+ * 
+ * We initialize the menu with following steps:
+ * 1. Wait for the insertion of the body element.
+ * 2. Inject an almost empty iframe element into the body element.
+ * 3. When the user presses a mouse button, populate the iframe with
+ *    the SVG document.
  */
 
 "use strict";
@@ -179,48 +205,16 @@ function createTextSetters(ownerDocument) {
  * The function is called when the user pressed button
  * before the menu is initialized.
  *
- * If the body element is not created, does nothings and
- * waits for the next mouse down.
- *
  * @param {MouseEvent} event The mouse event.
  */
-function initialize(event) {
-    if (document.getElementsByClassName("supress-compass-menu").length > 0) {
-        // The document is the menu itself
-        // (or some document not willing CompassMenu).
-        // Supressing the menu.
-        window.removeEventListener("mousedown", initialize, true);
-        return;
-    }
-
-    if (!document.body) {
-        return;
-    }
-
-    window.removeEventListener("mousedown", initialize, true);
-
+function initialize(event, iframe) {
     self.port.on("pageState", onPageState);
 
-    var iframe = document.createElement("iframe");
-
-    iframe.style.borderStyle = "none";
-    iframe.style.outline = "none";
-    iframe.style.backgroundColor = "transparent";
-    iframe.style.position = "absolute";
-    iframe.style.margin = "0";
-    iframe.style.padding = "0";
-    iframe.style.zIndex = "2147483647";
-
-    document.body.appendChild(iframe);
+    iframe.style.display = "inline";
 
     var ownerDocument = iframe.contentDocument;
 
-    ownerDocument.open();
-    ownerDocument.write(self.options.svgSource);
-    ownerDocument.close();
-
-    ownerDocument.body.style.margin = "0";
-    ownerDocument.body.style.padding = "0";
+    ownerDocument.body.innerHTML = self.options.svgSource;
 
     /** The element representing the entire menu including labels */
     var menuNode = ownerDocument.getElementById("menu");
@@ -272,8 +266,81 @@ function initialize(event) {
     menu.onMouseDown(event);
 }
 
-window.addEventListener("mousedown", initialize, true);
-
 self.port.on("configChanged", function(config) {
                  self.options.config = config;
              });
+
+/**
+ * Injects an iframe element into body and adds an event listener for
+ * mousepress events to initialize the menu.
+ * 
+ * The function is called when the body element is inserted.
+ */
+function onBodyAdded() {
+    // document.body.dataset seems not to be ready.
+    if (document.body.getAttribute('data-supress-compass-menu')) {
+        // The document is the menu itself
+        // (or some document not willing CompassMenu).
+        // Supressing the menu.
+        return;
+    }
+    
+    var iframe = document.createElement("iframe");
+
+    iframe.style.borderStyle = "none";
+    iframe.style.outline = "none";
+    iframe.style.backgroundColor = "transparent";
+    iframe.style.position = "absolute";
+    iframe.style.margin = "0";
+    iframe.style.padding = "0";
+    iframe.style.zIndex = "2147483647";
+    iframe.style.display = "none";
+
+    iframe.src = "data:text/html;charset=UTF-8,<!DOCTYPE html><html><head><meta charset='UTF-8'/><title></title></head><body data-supress-compass-menu='data-supress-compass-menu' style='margin:0; padding:0; overflow: hidden;'></body></html>";
+
+    document.body.appendChild(iframe);
+
+    function listener(event) {
+        window.removeEventListener("mousedown", listener, true);
+
+        initialize(event, iframe);
+    };
+
+    window.addEventListener("mousedown", listener, true);
+}
+
+/**
+ * Handles mutation records.
+ * 
+ * If the body element is inserted, disconnects the MutationObserver 
+ * and calls onBodyAdded.
+ * 
+ * @param {Array.<MutationRecord>} records The mutation records.
+ */
+function onMutate(records) {
+    for each (var record in records) {
+        if (record.type !== 'childList') {
+            continue;
+        }
+
+        for each (var node in record.addedNodes) {
+            if (node.localName === 'body') {
+                mutationObserver.disconnect();
+
+                try {
+                onBodyAdded();
+                } catch (e) {
+                    console.log(e.message);
+                }
+
+                return;
+            }
+        }
+    }
+}
+
+var mutationObserver = new MutationObserver(onMutate);
+
+mutationObserver.observe(document.documentElement, {
+                             childList: true
+                         });
