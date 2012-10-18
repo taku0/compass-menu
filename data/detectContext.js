@@ -66,13 +66,13 @@ function isInFrame(node) {
  * @type {Array.<{detector: function(Node): boolean, context: string}>}
  */
 var contextDetectors = [
-    {detector: isSelected, context: "selection"},
     {detector: xPathDetector("self::img and (ancestor::a[@href] or ancestor::area[@href])"), context: "imageLink"},
     {detector: xPathDetector("ancestor-or-self::a[@href] or ancestor-or-self::area[@href]"), context: "link"},
     {detector: xPathDetector("self::img"), context: "image"},
     {detector: xPathDetector("self::audio"), context: "audio"},
     {detector: xPathDetector("self::video"), context: "video"},
     {detector: xPathDetector("self::input[@type = 'text' or @type = 'password'] or self::textarea"), context: "text"},
+    {detector: isSelected, context: "selection"},
     {detector: isInFrame, context: "frame"}
 ];
 
