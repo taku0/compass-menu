@@ -6,11 +6,11 @@
 
 /*
  * The menu class.
- * 
+ *
  * The menu captures input events on the window and updates DOM.
  * The menu has a state object handling input.
- * 
- * The coordinate system used by the menu is the user coordinate of 
+ *
+ * The coordinate system used by the menu is the user coordinate of
  * the menu SVG node.
  */
 

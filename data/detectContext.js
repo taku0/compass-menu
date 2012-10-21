@@ -6,11 +6,11 @@
 
 /*
  * Functions detect the context of the menu.
- * 
+ *
  * The main function is detectContext.
  * The context is detected with detector functions.
  * Detector functions takes a node and returns boolean.
- * Detector functions are applied to the node in sequence and 
+ * Detector functions are applied to the node in sequence and
  * the associated context name of the detector function returning true first
  * is returned.
  * Typical detector function uses XPath returning boolean.

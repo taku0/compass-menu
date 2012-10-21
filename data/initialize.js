@@ -6,7 +6,7 @@
 
 /*
  * Initialization routines
- * 
+ *
  * Those codes bridge the SVG DOM and the CompassMenu object
  * as well as attach the menu to the page.
  * Those codes heavily depend on details of the SVG document.
@@ -14,23 +14,23 @@
  * An iframe with SVG document is injected into document body.
  * Since we should avoid slowdown of page loading as much as possible,
  * the menu is initialized when the user presses a mouse button.
- * 
+ *
  * To populate iframe with SVG, we have several options:
  * 1. iframe.contentDocument.write(svgSource);
  * 2. iframe.contentDocument.body.innerHTML = svgSource;
  * 3. Other DOM tree manipulations.
- * 
- * With option 1, the created document seems to be regarded as 
+ *
+ * With option 1, the created document seems to be regarded as
  * a insecure document.  A mixed content warning is emitted when
  * the page is restored from the bfcache.
- * 
- * With option 2 and 3, if we insert the iframe element and populate 
- * the content in same event handler, the initial page loading starts 
- * after returning from the event handler, so that the content is 
+ *
+ * With option 2 and 3, if we insert the iframe element and populate
+ * the content in same event handler, the initial page loading starts
+ * after returning from the event handler, so that the content is
  * overridden with about:blank.
- * 
+ *
  * Therefore, we need to insert the iframe element before mouse press events.
- * 
+ *
  * We initialize the menu with following steps:
  * 1. Wait for the insertion of the body element.
  * 2. Inject an almost empty iframe element into the body element.
@@ -219,7 +219,7 @@ function initialize(event, iframe) {
     /** The element representing the entire menu including labels */
     var menuNode = ownerDocument.getElementById("menu");
 
-    // If the page is zoomed, it seems that content size may be rounded up 
+    // If the page is zoomed, it seems that content size may be rounded up
     // while iframe size may be rounded down.
     // I am not sure this is specified.
     // FIXME: assuming menuNode.getAttribute("width") is in px.
@@ -273,7 +273,7 @@ self.port.on("configChanged", function(config) {
 /**
  * Injects an iframe element into body and adds an event listener for
  * mousepress events to initialize the menu.
- * 
+ *
  * The function is called when the body element is inserted.
  */
 function onBodyAdded() {
@@ -284,7 +284,7 @@ function onBodyAdded() {
         // Supressing the menu.
         return;
     }
-    
+
     var iframe = document.createElement("iframe");
 
     iframe.style.borderStyle = "none";
