@@ -309,38 +309,20 @@ function onBodyAdded() {
     window.addEventListener("mousedown", listener, true);
 }
 
-/**
- * Handles mutation records.
- * 
- * If the body element is inserted, disconnects the MutationObserver 
- * and calls onBodyAdded.
- * 
- * @param {Array.<MutationRecord>} records The mutation records.
- */
-function onMutate(records) {
-    for each (var record in records) {
-        if (record.type !== 'childList') {
-            continue;
+if (document.body) {
+    onBodyAdded();
+} else {
+    var onMutate = function(records) {
+        if (document.body) {
+            mutationObserver.disconnect();
+
+            onBodyAdded();
         }
+    };
 
-        for each (var node in record.addedNodes) {
-            if (node.localName === 'body') {
-                mutationObserver.disconnect();
+    var mutationObserver = new MutationObserver(onMutate);
 
-                try {
-                onBodyAdded();
-                } catch (e) {
-                    console.log(e.message);
-                }
-
-                return;
-            }
-        }
-    }
+    mutationObserver.observe(document.documentElement, {
+                                 childList: true
+                             });
 }
-
-var mutationObserver = new MutationObserver(onMutate);
-
-mutationObserver.observe(document.documentElement, {
-                             childList: true
-                         });
