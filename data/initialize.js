@@ -301,12 +301,12 @@ function onBodyAdded() {
     document.body.appendChild(iframe);
 
     function listener(event) {
-        window.removeEventListener("mousedown", listener, true);
+        window.removeEventListener("mousedown", listener, false);
 
         initialize(event, iframe);
     };
 
-    window.addEventListener("mousedown", listener, true);
+    window.addEventListener("mousedown", listener, false);
 }
 
 if (document.body) {

@@ -94,13 +94,19 @@ function PieMenu(container, menuNode, outer, hole,
     }
 
     function registerEventListener(win) {
-        win.addEventListener("mousedown", this.onMouseDown.bind(this), true);
-        win.addEventListener("mouseup", this.onMouseUp.bind(this), true);
-        win.addEventListener("mousemove", this.onMouseMove.bind(this), true);
-        win.addEventListener("scroll", this.onScroll.bind(this), true);
-        win.addEventListener("keydown", this.onKeyDown.bind(this), true);
-        win.addEventListener("keyup", this.onKeyUp.bind(this), true);
-        win.addEventListener("contextmenu", this.onContextMenu.bind(this), true);
+        function doRegister(name, handler) {
+            win.addEventListener(name, handler.bind(this), false);
+        }
+
+        doRegister = doRegister.bind(this);
+        
+        doRegister("mousedown", this.onMouseDown);
+        doRegister("mouseup", this.onMouseUp);
+        doRegister("mousemove", this.onMouseMove);
+        doRegister("scroll", this.onScroll);
+        doRegister("keydown", this.onKeyDown);
+        doRegister("keyup", this.onKeyUp);
+        doRegister("contextmenu", this.onContextMenu);
     }
 
     windows.forEach(registerEventListener, this);
@@ -541,7 +547,7 @@ PieMenu.prototype.setConfig = function(config) {
  * @param {MouseEvent} event The mouse event object.
  */
 PieMenu.prototype.onMouseDown = function(event) {
-    if (this.state.onMouseDown) {
+    if (this.state.onMouseDown && !event.defaultPrevented) {
         this.state.onMouseDown(event);
     }
 };
@@ -552,7 +558,7 @@ PieMenu.prototype.onMouseDown = function(event) {
  * @param {MouseEvent} event The mouse event object.
  */
 PieMenu.prototype.onMouseUp = function(event) {
-    if (this.state.onMouseUp) {
+    if (this.state.onMouseUp && !event.defaultPrevented) {
         this.state.onMouseUp(event);
     }
 };
@@ -563,7 +569,7 @@ PieMenu.prototype.onMouseUp = function(event) {
  * @param {MouseEvent} event The mouse event object.
  */
 PieMenu.prototype.onMouseMove = function(event) {
-    if (this.state.onMouseMove) {
+    if (this.state.onMouseMove && !event.defaultPrevented) {
         this.state.onMouseMove(event);
     }
 };
@@ -574,7 +580,7 @@ PieMenu.prototype.onMouseMove = function(event) {
  * @param {Event} event The event object.
  */
 PieMenu.prototype.onScroll = function(event) {
-    if (this.state.onScroll) {
+    if (this.state.onScroll && !event.defaultPrevented) {
         this.state.onScroll(event);
     }
 };
@@ -585,7 +591,7 @@ PieMenu.prototype.onScroll = function(event) {
  * @param {KeyboardEvent} event The keyboard event object.
  */
 PieMenu.prototype.onKeyDown = function(event) {
-    if (this.state.onKeyDown) {
+    if (this.state.onKeyDown && !event.defaultPrevented) {
         this.state.onKeyDown(event);
     }
 };
@@ -596,7 +602,7 @@ PieMenu.prototype.onKeyDown = function(event) {
  * @param {KeyboardEvent} event The keyboard event object.
  */
 PieMenu.prototype.onKeyUp = function(event) {
-    if (this.state.onKeyUp) {
+    if (this.state.onKeyUp && !event.defaultPrevented) {
         this.state.onKeyUp(event);
     }
 };
@@ -607,7 +613,7 @@ PieMenu.prototype.onKeyUp = function(event) {
  * @param {KeyboardEvent} event The keyboard event object.
  */
 PieMenu.prototype.onContextMenu = function(event) {
-    if (this.state.onContextMenu) {
+    if (this.state.onContextMenu && !event.defaultPrevented) {
         this.state.onContextMenu(event);
     }
 };
