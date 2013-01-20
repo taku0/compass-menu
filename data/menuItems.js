@@ -426,7 +426,7 @@ var linkMenu = {
                 action: function(menu) {
                     var url = extractLinkURL(menu.target);
 
-                    requestSaveURL(url);
+                    requestSaveURL(url, location.toString());
                 }
             }
         ],
@@ -576,7 +576,7 @@ var frameMenu = {
                 icon: "#save",
                 label: "save_frame",
                 action: function() {
-                    requestSaveURL(location.toString());
+                    requestSaveURL(location.toString(), location.toString());
                 }
             }
         ],
