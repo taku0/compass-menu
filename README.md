@@ -7,7 +7,7 @@ and https://github.com/taku0/compass-menu
 
 ## Building
 
-The CompassMenu requires Firefox Add-on SDK 1.12.
+The CompassMenu requires Firefox Add-on SDK 1.12 or newer.
 
 ## License
 
