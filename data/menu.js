@@ -26,7 +26,7 @@
  *
  * - Holds items
  * - Updates SVG DOM nodes
- * - Handles input, using the State pattern.
+ * - Handles input, using the state pattern.
  *
  * The index of the menu item begins from 0 to 7.
  * The right item has the index 0.  The index increases clockwise.
@@ -186,10 +186,10 @@ PieMenu.prototype.createTranslateTransform = function(x, y) {
 };
 
 /**
- * Moves the menu or open submenu, depending on the mouse cursor position.
+ * Moves the menu or opens a sub menu, depending on the mouse cursor position.
  *
- * If the mouse cursor position is within menu, does nothing.
- * Otherwise, if the nearest menu item has submenu, opens it.
+ * If the mouse cursor position is within the menu, does nothing.
+ * Otherwise, if the nearest menu item has a sub menu, opens it.
  * Otherwise, moves the menu.
  *
  * If the mouse cursor position is omitted, the last point is used.
@@ -298,7 +298,7 @@ PieMenu.prototype.getItemIndex = function(point, center) {
 /**
  * Returns the current menu item variant.
  *
- * If the current variant is a secondary variant and the secondary variant is
+ * If the current variant is the secondary variant and the secondary variant is
  * not defined, the primary variant is returnd.
  *
  * @return {types.Variant} The current menu item variant.
@@ -321,7 +321,7 @@ PieMenu.prototype.getVariant = function(index) {
 };
 
 /**
- * @return {boolean} true iff the menu item at given index has submenus.
+ * @return {boolean} true iff the menu item at given index has a sub menu.
  *
  * @param {number} index The index of the menu item.
  */
@@ -332,7 +332,7 @@ PieMenu.prototype.hasChildren = function(index) {
 };
 
 /**
- * @return {types.MenuItem} The submenu items at given index.
+ * @return {types.MenuItem} The sub menu items at given index.
  *
  * @param {number} index The index of the menu item.
  */
@@ -423,7 +423,7 @@ PieMenu.prototype.updateIcons = function() {
 };
 
 /**
- * Resets timer showing label texts.
+ * Resets the timer showing label texts.
  */
 PieMenu.prototype.resetLabelTimer = function() {
     this.clearLabelTimer();
@@ -433,7 +433,7 @@ PieMenu.prototype.resetLabelTimer = function() {
 };
 
 /**
- * Clears timer showing label texts.
+ * Clears the timer showing label texts.
  */
 PieMenu.prototype.clearLabelTimer = function() {
     if (this.labelTimerID) {
@@ -442,7 +442,7 @@ PieMenu.prototype.clearLabelTimer = function() {
 };
 
 /**
- * Hides label texts.
+ * Hides the label texts.
  */
 PieMenu.prototype.hideLabelTexts = function() {
     for (let textSetter of this.textSetters) {
@@ -453,7 +453,7 @@ PieMenu.prototype.hideLabelTexts = function() {
 };
 
 /**
- * Updates label texts if the labels are visible..
+ * Updates the label texts if the labels are visible.
  */
 PieMenu.prototype.updateLabelTextsIfVisible = function() {
     if (this.labelVisible) {
@@ -465,7 +465,7 @@ PieMenu.prototype.updateLabelTextsIfVisible = function() {
 }
 
 /**
- * Updates label texts.
+ * Updates the label texts.
  */
 PieMenu.prototype.updateLabelTexts = function() {
     for (var i = 0; i < 8; i++) {
@@ -493,7 +493,7 @@ PieMenu.prototype.updateLabelTexts = function() {
  *
  * Does nothing if the nearest menu item is empty.
  *
- * @param {{x: number, y: number}} point the mouse cursor position.
+ * @param {{x: number, y: number}} point The mouse cursor position.
  */
 PieMenu.prototype.activateItemAt = function(point) {
     var center = this.getCenter();
@@ -618,7 +618,7 @@ PieMenu.prototype.onContextMenu = function(event) {
     }
 };
 
-//// State classes for the State patterns
+//// State classes for the state patterns
 
 /**
  * State classes
@@ -649,7 +649,7 @@ PieMenu.states = {
     },
 
     /**
-     * The state the user holding right button without moving the mouse.
+     * The state the user is holding the right button without moving the mouse.
      *
      * @constructor
      * @param {PieMenu} menu The menu.
@@ -661,7 +661,7 @@ PieMenu.states = {
     },
 
     /**
-     * The state the user holding right button after moving the mouse.
+     * The state the user is holding the right button and moved the mouse.
      *
      * Releasing the button activates a menu item.
      *
@@ -682,7 +682,7 @@ PieMenu.states = {
     },
 
     /**
-     * The state the user released right button without moving the mouse.
+     * The state the user released the right button without moving the mouse.
      *
      * Pressing and releasing the button activates a menu item.
      *
@@ -705,7 +705,7 @@ PieMenu.states.Released.prototype = new PieMenu.states.ShowingState();
 /**
  * Handles mousemove events.
  *
- * Moves the menu or opens submenu.
+ * Moves the menu or opens a sub menu.
  *
  * @param {MouseEvent} The mouse event object.
  */
@@ -800,7 +800,7 @@ PieMenu.states.ShowingState.prototype.onKeyUp = function(event) {
 /**
  * Handles scroll events.
  *
- * Moves the menu or opens submenu.
+ * Moves the menu or opens a sub menu.
  *
  * @param {MouseEvent} The mouse event object.
  */
@@ -813,7 +813,7 @@ PieMenu.states.ShowingState.prototype.onScroll = function(event) {
 /**
  * Handles context events.
  *
- * Prevents the default if opens the menu.
+ * Prevents the default if going to open the menu.
  *
  * @param {Event} The event object.
  */
@@ -919,7 +919,7 @@ PieMenu.states.Initial.prototype.isSupressed = function(event) {
 /**
  * Handles mousemove events.
  *
- * Transits to the Moved state
+ * Transits to the Moved state.
  *
  * @param {MouseEvent} The mouse event object.
  */
@@ -932,7 +932,7 @@ PieMenu.states.Pressed.prototype.onMouseMove = function(event) {
 /**
  * Handles scroll events.
  *
- * Transits to the Moved state
+ * Transits to the Moved state.
  *
  * @param {MouseEvent} The mouse event object.
  */
@@ -945,7 +945,8 @@ PieMenu.states.Pressed.prototype.onScroll = function(event) {
 /**
  * Handles mouseup events.
  *
- * Transits to the Released state if the button opened the menu is released.
+ * Transits to the Released state if the released button is 
+ * the button opened the menu.
  *
  * @param {MouseEvent} The mouse event object.
  */
@@ -964,7 +965,7 @@ PieMenu.states.Pressed.prototype.onMouseUp = function(event) {
 /**
  * Handles mouseup events.
  *
- * Activates the menu item and returns to Initial state.
+ * Activates the menu item and returns to the Initial state.
  *
  * @param {MouseEvent} The mouse event object.
  */

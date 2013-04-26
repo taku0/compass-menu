@@ -9,7 +9,7 @@
  *
  * Those codes bridge the SVG DOM and the CompassMenu object
  * as well as attach the menu to the page.
- * Those codes heavily depend on details of the SVG document.
+ * Those codes depend heavily on details of the SVG document.
  *
  * An iframe with SVG document is injected into document body.
  * Since we should avoid slowdown of page loading as much as possible,
@@ -150,7 +150,7 @@ function createTextSetters(ownerDocument) {
     var shadowTextElement = ownerDocument.getElementById("shadow_text");
 
     /**
-     * Returns The bounding box of the givien element excluding transformations.
+     * Returns the bounding box of the givien element excluding transformations.
      *
      * The given element is assumed to have the same styles to
      * the shadow text element.

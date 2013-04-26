@@ -8,10 +8,10 @@
  * The menu definition.
  *
  * There are several menus, one for each contexts.
- * Each menu is an array of menu item while a menu item is
+ * Each menu is an array of menu items while a menu item is
  * an array of variants.
- * Variants are primary variant and secondary variant.
- * Pressing alt select secondary variant.
+ * Variants are primary variant or secondary variant.
+ * Pressing alt selects the secondary variant.
  * See also types.Variant for detail.
  *
  * Null menu item represents empty item.
