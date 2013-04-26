@@ -652,15 +652,20 @@ var contexts = {
  */
 function evaluateXPath(xpath, node, resultType) {
     var document = node.ownerDocument || node;
-    var documentElement = document.documentElement;
-    var namespaceResolver =
-        document.createNSResolver(documentElement);
+
+    function resolveNamespace(prefix) {
+        if (prefix === "xhtml") {
+            return "http://www.w3.org/1999/xhtml";
+        } else {
+            return null;
+        }
+    }
 
     resultType = resultType || XPathResult.ANY_TYPE;
 
     var result =  document.evaluate(xpath,
                                     node,
-                                    namespaceResolver,
+                                    resolveNamespace,
                                     resultType,
                                     null);
 
@@ -684,10 +689,10 @@ function evaluateXPath(xpath, node, resultType) {
  * @param {Node} node A descendant node of anchor nodes.
  */
 function extractLinkURL(node) {
+    var xpath =
+        "(ancestor-or-self::xhtml:a | ancestor-or-self::xhtml:area)[@href]";
     var anchorNode =
-        evaluateXPath("(ancestor-or-self::a | ancestor-or-self::area)[@href]",
-                      node,
-                      XPathResult.FIRST_ORDERED_NODE_TYPE);
+        evaluateXPath(xpath, node, XPathResult.FIRST_ORDERED_NODE_TYPE);
 
     // The href property returns always a valid (i.e. not a relative) URL.
     return anchorNode.href;
