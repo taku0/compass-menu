@@ -26,13 +26,18 @@
 function xPathDetector(xpath) {
     return function(node) {
         var document = node.ownerDocument || node;
-        var documentElement = document.documentElement;
-        var namespaceResolver =
-            document.createNSResolver(documentElement);
+
+        function resolveNamespace(prefix) {
+            if (prefix === "xhtml") {
+                return "http://www.w3.org/1999/xhtml";
+            } else {
+                return null;
+            }
+        }
 
         return document.evaluate(xpath,
                                  node,
-                                 namespaceResolver,
+                                 resolveNamespace,
                                  XPathResult.BOOLEAN_TYPE,
                                  null).booleanValue;
     };
@@ -66,12 +71,12 @@ function isInFrame(node) {
  * @type {Array.<{detector: function(Node): boolean, context: string}>}
  */
 var contextDetectors = [
-    {detector: xPathDetector("self::img and (ancestor::a[@href] or ancestor::area[@href])"), context: "imageLink"},
-    {detector: xPathDetector("ancestor-or-self::a[@href] or ancestor-or-self::area[@href]"), context: "link"},
-    {detector: xPathDetector("self::img"), context: "image"},
-    {detector: xPathDetector("self::audio"), context: "audio"},
-    {detector: xPathDetector("self::video"), context: "video"},
-    {detector: xPathDetector("self::input[@type = 'text' or @type = 'password'] or self::textarea"), context: "text"},
+    {detector: xPathDetector("self::xhtml:img and (ancestor::xhtml:a[@href] or ancestor::xhtml:area[@href])"), context: "imageLink"},
+    {detector: xPathDetector("ancestor-or-self::xhtml:a[@href] or ancestor-or-self::xhtml:area[@href]"), context: "link"},
+    {detector: xPathDetector("self::xhtml:img"), context: "image"},
+    {detector: xPathDetector("self::xhtml:audio"), context: "audio"},
+    {detector: xPathDetector("self::xhtml:video"), context: "video"},
+    {detector: xPathDetector("self::xhtml:input[@type = 'text' or @type = 'password'] or self::xhtml:textarea"), context: "text"},
     {detector: isSelected, context: "selection"},
     {detector: isInFrame, context: "frame"}
 ];
