@@ -216,6 +216,8 @@ function initialize(event, iframe) {
 
     ownerDocument.body.innerHTML = self.options.svgSource;
 
+    self.options.svgSource = null;
+
     /** The element representing the entire menu including labels */
     var menuNode = ownerDocument.getElementById("menu");
 
@@ -282,6 +284,9 @@ function onBodyAdded() {
         // The document is the menu itself
         // (or some document not willing CompassMenu).
         // Supressing the menu.
+
+        self.options = null;
+
         return;
     }
 
