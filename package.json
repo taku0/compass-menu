@@ -5,9 +5,12 @@
   "author": "taku0 ( https://github.com/taku0 )",
   "license": "MPL 2.0",
   "id": "compass_menu@tatapa.org",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "icon": "data/icon.png",
   "icon64": "data/icon64.png",
+  "permissions": {
+    "private-browsing": true
+  },
   "preferences": [
     {
       "name": "openButton",
