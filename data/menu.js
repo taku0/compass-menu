@@ -59,7 +59,11 @@ function PieMenu(container, menuNode, outer, hole,
                  contexts, menuFilters, config,
                  localizedLabels) {
     if (!(this instanceof PieMenu)) {
-        return new PieMenu();
+        return new PieMenu(container, menuNode, outer, hole,
+                           itemElements, markerElements,
+                           textSetters,
+                           contexts, menuFilters, config,
+                           localizedLabels);
     }
 
     this.container = container;
