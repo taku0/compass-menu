@@ -311,7 +311,7 @@ PieMenu.prototype.getItemIndex = function(point, center) {
 PieMenu.prototype.getVariant = function(index) {
     var item = this.items[index];
 
-    if (item) {
+    if (item && item.length > 0) {
         var variant = item[this.variantIndex];
 
         if (variant) {
@@ -320,7 +320,7 @@ PieMenu.prototype.getVariant = function(index) {
             return item[0];
         }
     } else {
-        return item;
+        return null;
     }
 };
 
