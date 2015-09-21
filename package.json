@@ -1,13 +1,14 @@
 {
   "name": "compass_menu",
-  "fullName": "CompassMenu",
+  "title": "CompassMenu",
   "description": "A Mild Mouse Gesture",
   "author": "taku0 ( https://github.com/taku0 )",
   "license": "MPL 2.0",
   "id": "compass_menu@tatapa.org",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "icon": "data/icon.png",
   "icon64": "data/icon64.png",
+  "main": "lib/main.js",
   "permissions": {
     "private-browsing": true
   },

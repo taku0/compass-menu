@@ -586,7 +586,7 @@ var frameMenu = {
                 icon: "#source",
                 label: "view_frame_source",
                 action: function() {
-                    requestShowFrameSource();
+                    requestShowFrameSource(location.toString());
                 }
             }
         ],
@@ -854,8 +854,8 @@ function requestCopyText(text) {
  *
  * The function is asynchronous.
  */
-function requestShowFrameSource() {
-    self.port.emit("requestShowFrameSource");
+function requestShowFrameSource(url) {
+    self.port.emit("requestShowFrameSource", url);
 }
 
 /**
