@@ -13,29 +13,15 @@
  *
  * An iframe with SVG document is injected into document body.
  * Since we should avoid slowdown of page loading as much as possible,
- * the menu is initialized when the user presses a mouse button.
+ * the menu icons are loaded when the user presses a mouse button.
  *
- * To populate iframe with SVG, we have several options:
- * 1. iframe.contentDocument.write(svgSource);
- * 2. iframe.contentDocument.body.innerHTML = svgSource;
- * 3. Other DOM tree manipulations.
- *
- * With option 1, the created document seems to be regarded as
- * a insecure document.  A mixed content warning is emitted when
- * the page is restored from the bfcache.
- *
- * With option 2 and 3, if we insert the iframe element and populate
- * the content in same event handler, the initial page loading starts
- * after returning from the event handler, so that the content is
- * overridden with about:blank.
- *
- * Therefore, we need to insert the iframe element before mouse press events.
+ * We need the iframe to be populated when a mouse button is pressed,
+ * so that we need to insert the iframe element before mouse press events.
  *
  * We initialize the menu with following steps:
  * 1. Wait for the insertion of the body element.
- * 2. Inject an almost empty iframe element into the body element.
- * 3. When the user presses a mouse button, populate the iframe with
- *    the SVG document.
+ * 2. Inject an iframe element with menu.svg into the body element.
+ * 3. When the user presses a mouse button, load the menu icons asynchronously.
  */
 
 "use strict";
@@ -214,10 +200,6 @@ function initialize(event, iframe) {
 
     var ownerDocument = iframe.contentDocument;
 
-    ownerDocument.body.innerHTML = self.options.svgSource;
-
-    self.options.svgSource = null;
-
     /** The element representing the entire menu including labels */
     var menuNode = ownerDocument.getElementById("menu");
 
@@ -242,14 +224,9 @@ function initialize(event, iframe) {
 
     /**
      * An array of functions setting label text.
-     *     Passing null to functions hides balloon.
+     * Passing null to functions hides balloon.
      */
     var textSetters = createTextSetters(ownerDocument);
-
-    /**
-     * The configuration of the add-on.
-     */
-    var config = self.options.config;
 
     var menu = new PieMenu(iframe,
                            menuNode,
@@ -260,12 +237,35 @@ function initialize(event, iframe) {
                            textSetters,
                            contexts,
                            menuFilters,
-                           config,
+                           self.options.config,
                            self.options.localizedLabels);
 
-    self.port.on("configChanged", menu.setConfig.bind(menu));
+    loadIconsAsync(ownerDocument);
 
+    self.port.on("configChanged", menu.setConfig.bind(menu));
     menu.onMouseDown(event);
+}
+
+/**
+ * Loads menu icons asynchronously and inject them into the SVG document.
+ */
+function loadIconsAsync(ownerDocument) {
+    // XMLHttpRequest fails silently for custom URL scheme.
+    // xlink:href does not work neither.
+    // Using iframe instead.
+
+    var iframe = document.createElement("iframe");
+
+    iframe.src = "res-compass-menu-at-tatapa-dot-org://compass_menu-at-tatapa-dot-org/data/menu_icons.svg";
+
+    iframe.onload = function() {
+        ownerDocument.documentElement.appendChild(iframe.contentDocument.getElementById("icon_defs"));
+        document.body.removeChild(iframe);
+    };
+
+    iframe.style.display = "none";
+
+    document.body.appendChild(iframe);
 }
 
 self.port.on("configChanged", function(config) {
@@ -280,7 +280,7 @@ self.port.on("configChanged", function(config) {
  */
 function onBodyAdded() {
     // document.body.dataset seems not to be ready.
-    if (document.body.getAttribute('data-supress-compass-menu')) {
+    if (document.documentElement.getAttribute('data-supress-compass-menu')) {
         // The document is the menu itself
         // (or some document not willing CompassMenu).
         // Supressing the menu.
@@ -301,7 +301,7 @@ function onBodyAdded() {
     iframe.style.zIndex = "2147483647";
     iframe.style.display = "none";
 
-    iframe.src = "data:text/html;charset=UTF-8,<!DOCTYPE html><html><head><meta charset='UTF-8'/><title></title></head><body data-supress-compass-menu='data-supress-compass-menu' style='margin:0; padding:0; overflow: hidden;'></body></html>";
+    iframe.src = "res-compass-menu-at-tatapa-dot-org://compass_menu-at-tatapa-dot-org/data/menu.svg";
 
     document.body.appendChild(iframe);
 

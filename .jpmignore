@@ -1,0 +1,9 @@
+.git
+.gitignore
+.jpmignore
+*.xpi
+*~
+/script
+/test
+/doc
+.tern-port
