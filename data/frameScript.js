@@ -1,4 +1,11 @@
-Components.utils.import("resource://gre/modules/devtools/Console.jsm");
+try {
+    // for Firefox 44 and newer
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=1203159
+    Components.utils.import("resource://devtools/Console.jsm");
+} catch(e) {
+    // for older
+    Components.utils.import("resource://gre/modules/devtools/Console.jsm");
+}
 
 var listeners = {
     disableFrameScript: disableFrameScript,
