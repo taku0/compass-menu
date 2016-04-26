@@ -32,7 +32,7 @@
  * @param {number} start The start of the range, inclusive
  * @param {number} end The end of the range, exclusive
  */
-function range(start, end) {
+function* range(start, end) {
     for (var i = start; i < end; i++) {
         yield i;
     }
@@ -44,8 +44,8 @@ function range(start, end) {
  * @param {string} prefix The prefix of the ID.
  */
 function getNumberedElements(ownerDocument, prefix) {
-    return [ownerDocument.getElementById(prefix + i)
-            for each (i in range(0, 8))];
+    return [...range(0, 8)]
+        .map((i) => ownerDocument.getElementById(prefix + i));
 }
 
 /**
@@ -176,13 +176,13 @@ function createTextSetters(ownerDocument) {
         false, false, true, true
     ];
 
-    return [
-        textSetter(balloonElements[i], textElements[i], getBoundingBoxes[i],
-                   rectFillElements[i], rectStrokeElements[i],
-                   circleFillElements[i], circleStrokeElements[i],
-                   isLeftToRights[i])
-        for each (i in range(0, 8))
-    ];
+    return [...range(0, 8)]
+        .map((i) =>
+             textSetter(balloonElements[i], textElements[i],
+                        getBoundingBoxes[i],
+                        rectFillElements[i], rectStrokeElements[i],
+                        circleFillElements[i], circleStrokeElements[i],
+                        isLeftToRights[i]));
 }
 
 /**
