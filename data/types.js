@@ -8,7 +8,7 @@
  *  Types for JSDoc
  */
 
-"use strict";
+'use strict';
 
 var types = types || {};
 
@@ -29,11 +29,15 @@ var types = types || {};
  *     Menu filters may refer the class names.
  * The optional "children" property is an array of child menu items.
  *
- * @typedef {{icon: string,
- *            label: string,
- *            action: ?function(PieMenu),
- *            classes: ?Array.<string>
- *            children: ?Array.<types.MenuItem>}}
+ * @typedef {
+ *   {
+ *     icon: string,
+ *     label: string,
+ *     action: ?function(PieMenu),
+ *     classes: ?Array.<string>,
+ *     children: ?Array.<types.MenuItem>,
+ *   }
+ * }
  */
 types.Variant = null;
 
@@ -49,13 +53,17 @@ types.MenuItem = null;
 /**
  * The type of the states of the page when the menu is created.
  *
- * The "isFirst" property is true iff there is no previous pages in the history.
- * The "isLast" property is true iff there is no next pages in the history.
+ * The "topURL" property is the URL of the top frame.
+ * The "topURL" property is the title of the top frame.
  * The "isLoading" property is true iff the page is loading.
  *
- * @typedef {{isFirst: boolean,
- *            isLast: boolean,
- *            isLoading: boolean}}
+ * @typedef {
+ *   {
+ *     topURL: string,
+ *     topTitle: string,
+ *     isLoading: boolean
+ *   }
+ * }
  */
 types.PageState = null;
 
@@ -72,10 +80,13 @@ types.PageState = null;
  *
  * Any filter should not modify original menu item objects.
  *
- * @typedef {function(Node,
- *                    types.PageState,
- *                    types.MenuItem,
- *                    Object.<string, *>):
- *               ?types.MenuItem}
+ * @typedef {
+ *   function(
+ *     Node,
+ *     types.PageState,
+ *     types.MenuItem,
+ *     Object.<string, *>
+ *   ): ?types.MenuItem
+ * }
  */
 types.MenuFilter = null;

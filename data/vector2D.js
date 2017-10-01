@@ -8,56 +8,68 @@
  * 2D vector class.
  */
 
-"use strict";
+'use strict';
 
-function Vector2D() {
-    if (!(this instanceof Vector2D)) {
-        var vector = new Vector2D();
+class Vector2D {
+    constructor(x, y) {
+        switch (arguments.length) {
+        case 0:
+            return;
+        case 1:
+            var point = x;
 
-        return Vector2D.apply(vector, arguments);
+            this.x = point.x;
+            this.y = point.y;
+
+            return;
+        default:
+            this.x = x;
+            this.y = y;
+
+            return;
+        }
     }
 
-    switch (arguments.length) {
-    case 0:
-        return this;
-    case 1:
-        var point = arguments[0];
-
-        this.x = point.x;
-        this.y = point.y;
-
-        return this;
-    default:
-        this.x = arguments[0];
-        this.y = arguments[1];
-
-        return this;
+    plus(other) {
+        return new Vector2D(this.x + other.x, this.y + other.y);
     }
-}
 
-Vector2D.prototype = {
-    plus: function(other) new Vector2D(this.x + other.x, this.y + other.y),
+    scale(factor) {
+        return new Vector2D(factor * this.x, factor * this.y);
+    }
 
-    scale: function(factor) new Vector2D(factor * this.x, factor * this.y),
+    diff(other) {
+        return new Vector2D(this.x - other.x, this.y - other.y);
+    }
 
-    diff: function(other) new Vector2D(this.x - other.x, this.y - other.y),
+    nagate() {
+        return new Vector2D(-this.x, -this.y);
+    }
 
-    nagate: function() new Vector2D(-this.x, -this.y),
+    normSquared() {
+        return this.x * this.x + this.y * this.y;
+    }
 
-    normSquared: function() this.x * this.x + this.y * this.y,
+    norm() {
+        return Math.sqrt(this.normSquared());
+    }
 
-    norm: function() Math.sqrt(this.normSquared()),
+    distanceSquared(other) {
+        return this.diff(other).normSquared();
+    }
 
-    distanceSquared: function(other) this.diff(other).normSquared(),
+    distance(other) {
+        return Math.sqrt(this.distanceSquared());
+    }
 
-    distance: function(other) Math.sqrt(this.distanceSquared()),
+    normalize() {
+        return this.scale(1.0 / this.norm());
+    }
 
-    normalize: function() this.scale(1.0 / this.norm()),
-
-    applyTransform: function(matrix) {
-        var x = matrix.a * this.x + matrix.c * this.y + matrix.e;
-        var y = matrix.b * this.x + matrix.d * this.y + matrix.f;
+    applyTransform(matrix) {
+        const x = matrix.a * this.x + matrix.c * this.y + matrix.e;
+        const y = matrix.b * this.x + matrix.d * this.y + matrix.f;
 
         return new Vector2D(x, y);
     }
-};
+}

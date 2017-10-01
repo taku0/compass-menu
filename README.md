@@ -5,10 +5,6 @@ The CompassMenu is a extension replacing the right-click menu of Firefox with a 
 For more details, visit http://www.tatapa.org/~takuo/compass_menu/index.html
 and https://github.com/taku0/compass-menu
 
-## Building
-
-The CompassMenu requires Firefox Add-on SDK 1.12 or newer.
-
 ## License
 
 Copyright 2012 taku0 ( https://github.com/taku0 )

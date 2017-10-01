@@ -16,7 +16,7 @@
  * Typical detector function uses XPath returning boolean.
  */
 
-"use strict";
+'use strict';
 
 /**
  * @return {function(Node): boolean} A function takes node and returns true iff
@@ -24,22 +24,24 @@
  * @param {string} xpath A XPath expression to be evaluated.
  */
 function xPathDetector(xpath) {
-    return function(node) {
-        var document = node.ownerDocument || node;
+    return (node) => {
+        const document = node.ownerDocument || node;
 
         function resolveNamespace(prefix) {
-            if (prefix === "xhtml") {
-                return "http://www.w3.org/1999/xhtml";
+            if (prefix === 'xhtml') {
+                return 'http://www.w3.org/1999/xhtml';
             } else {
                 return null;
             }
         }
 
-        return document.evaluate(xpath,
-                                 node,
-                                 resolveNamespace,
-                                 XPathResult.BOOLEAN_TYPE,
-                                 null).booleanValue;
+        return document.evaluate(
+            xpath,
+            node,
+            resolveNamespace,
+            XPathResult.BOOLEAN_TYPE,
+            null
+        ).booleanValue;
     };
 }
 
@@ -47,8 +49,8 @@ function xPathDetector(xpath) {
  * @return {boolean} true iff the selection is not empty
  */
 function isSelected(node) {
-    var document = node.ownerDocument;
-    var selection = document.getSelection();
+    const document = node.ownerDocument;
+    const selection = document.getSelection();
 
     return !selection.isCollapsed;
 }
@@ -57,10 +59,10 @@ function isSelected(node) {
  * @return {boolean} true iff the given node is in a frame
  */
 function isInFrame(node) {
-    var document = node.ownerDocument;
-    var window = document.defaultView;
+    const document = node.ownerDocument;
+    const window = document.defaultView;
 
-    return window.frameElement !== null;
+    return window !== window.top;
 }
 
 /**
@@ -71,14 +73,14 @@ function isInFrame(node) {
  * @type {Array.<{detector: function(Node): boolean, context: string}>}
  */
 var contextDetectors = [
-    {detector: xPathDetector("self::xhtml:img and (ancestor::xhtml:a[@href] or ancestor::xhtml:area[@href])"), context: "imageLink"},
-    {detector: xPathDetector("ancestor-or-self::xhtml:a[@href] or ancestor-or-self::xhtml:area[@href]"), context: "link"},
-    {detector: xPathDetector("self::xhtml:img"), context: "image"},
-    {detector: xPathDetector("self::xhtml:audio"), context: "audio"},
-    {detector: xPathDetector("self::xhtml:video"), context: "video"},
-    {detector: xPathDetector("self::xhtml:input[@type = 'text' or @type = 'password'] or self::xhtml:textarea"), context: "text"},
-    {detector: isSelected, context: "selection"},
-    {detector: isInFrame, context: "frame"}
+    {detector: xPathDetector('self::xhtml:img and (ancestor::xhtml:a[@href] or ancestor::xhtml:area[@href])'), context: 'imageLink'},
+    {detector: xPathDetector('ancestor-or-self::xhtml:a[@href] or ancestor-or-self::xhtml:area[@href]'), context: 'link'},
+    {detector: xPathDetector('self::xhtml:img'), context: 'image'},
+    {detector: xPathDetector('self::xhtml:audio'), context: 'audio'},
+    {detector: xPathDetector('self::xhtml:video'), context: 'video'},
+    {detector: xPathDetector('self::xhtml:input[@type = "text" or @type = "password" or @type = "search" or not(@type)] or self::xhtml:textarea'), context: 'text'},
+    {detector: isSelected, context: 'selection'},
+    {detector: isInFrame, context: 'frame'}
 ];
 
 /**
@@ -92,5 +94,5 @@ function detectContext(node) {
         }
     }
 
-    return "page";
+    return 'page';
 }

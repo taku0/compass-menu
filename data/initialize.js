@@ -24,7 +24,7 @@
  * 3. When the user presses a mouse button, load the menu icons asynchronously.
  */
 
-"use strict";
+'use strict';
 
 /**
  * Range generator.
@@ -33,7 +33,7 @@
  * @param {number} end The end of the range, exclusive
  */
 function* range(start, end) {
-    for (var i = start; i < end; i++) {
+    for (let i = start; i < end; i++) {
         yield i;
     }
 }
@@ -74,39 +74,41 @@ function createTextSetters(ownerDocument) {
      * @param {boolean} isLeftToRight
      *     true iff the text is from left to right.
      */
-    function textSetter(balloonElement,
-                        textElement,
-                        getBoundingBox,
-                        rectFillElement, rectStrokeElement,
-                        circleFillElement, circleStrokeElement,
-                        isLeftToRight) {
+    function textSetter(
+        balloonElement,
+        textElement,
+        getBoundingBox,
+        rectFillElement, rectStrokeElement,
+        circleFillElement, circleStrokeElement,
+        isLeftToRight
+    ) {
         function doSetText(text) {
             balloonElement.style.display = 'inline';
             textElement.style.display = 'inline';
 
             textElement.textContent = text;
 
-            var boundingBox = getBoundingBox(textElement);
-            var widthText = boundingBox.width.toString();
+            const boundingBox = getBoundingBox(textElement);
+            const widthText = boundingBox.width.toString();
 
-            rectFillElement.setAttribute("width", widthText);
-            rectStrokeElement.setAttribute("width", widthText);
+            rectFillElement.setAttribute('width', widthText);
+            rectStrokeElement.setAttribute('width', widthText);
 
             if (isLeftToRight) {
-                var left = textElement.x.baseVal.getItem(0).value;
-                var x = left + boundingBox.width;
+                const left = textElement.x.baseVal.getItem(0).value;
+                const x = left + boundingBox.width;
 
-                circleFillElement.setAttribute("cx", x);
-                circleStrokeElement.setAttribute("cx", x);
+                circleFillElement.setAttribute('cx', x);
+                circleStrokeElement.setAttribute('cx', x);
             } else {
-                var right = textElement.x.baseVal.getItem(0).value;
-                var x = right - boundingBox.width;
+                const right = textElement.x.baseVal.getItem(0).value;
+                const x = right - boundingBox.width;
 
-                circleFillElement.setAttribute("cx", x);
-                circleStrokeElement.setAttribute("cx", x);
+                circleFillElement.setAttribute('cx', x);
+                circleStrokeElement.setAttribute('cx', x);
 
-                rectFillElement.setAttribute("x", x);
-                rectStrokeElement.setAttribute("x", x);
+                rectFillElement.setAttribute('x', x);
+                rectStrokeElement.setAttribute('x', x);
             }
         }
 
@@ -133,7 +135,7 @@ function createTextSetters(ownerDocument) {
      *
      * @type {Node}
      */
-    var shadowTextElement = ownerDocument.getElementById("shadow_text");
+    const shadowTextElement = ownerDocument.getElementById('shadow_text');
 
     /**
      * Returns the bounding box of the givien element excluding transformations.
@@ -150,39 +152,45 @@ function createTextSetters(ownerDocument) {
 
         shadowTextElement.textContent = textElement.textContent;
 
-        var boundingBox = shadowTextElement.getBBox();
+        const boundingBox = shadowTextElement.getBBox();
 
         shadowTextElement.style.display = 'none';
 
         return boundingBox;
     }
 
-    var balloonElements = getNumberedElements(ownerDocument, "balloon");
-    var textElements = getNumberedElements(ownerDocument, "text");
-    var rectFillElements = getNumberedElements(ownerDocument, "rect_fill");
-    var rectStrokeElements = getNumberedElements(ownerDocument, "rect_stroke");
-    var circleFillElements = getNumberedElements(ownerDocument, "circle_fill");
-    var circleStrokeElements = getNumberedElements(ownerDocument, "circle_stroke");
+    const balloonElements = getNumberedElements(ownerDocument, 'balloon');
+    const textElements = getNumberedElements(ownerDocument, 'text');
+    const rectFillElements = getNumberedElements(ownerDocument, 'rect_fill');
+    const rectStrokeElements =
+              getNumberedElements(ownerDocument, 'rect_stroke');
+    const circleFillElements =
+              getNumberedElements(ownerDocument, 'circle_fill');
+    const circleStrokeElements =
+              getNumberedElements(ownerDocument, 'circle_stroke');
 
-    var getBoundingBoxes = [
+    const getBoundingBoxes = [
         simpleGetBoundingBox, simpleGetBoundingBox,
         tiltedGetBoundingBox, simpleGetBoundingBox,
         simpleGetBoundingBox, simpleGetBoundingBox,
         tiltedGetBoundingBox, simpleGetBoundingBox
     ];
 
-    var isLeftToRights = [
+    const isLeftToRights = [
         true, true, false, false,
         false, false, true, true
     ];
 
     return [...range(0, 8)]
-        .map((i) =>
-             textSetter(balloonElements[i], textElements[i],
-                        getBoundingBoxes[i],
-                        rectFillElements[i], rectStrokeElements[i],
-                        circleFillElements[i], circleStrokeElements[i],
-                        isLeftToRights[i]));
+        .map(
+            (i) => textSetter(
+                balloonElements[i], textElements[i],
+                getBoundingBoxes[i],
+                rectFillElements[i], rectStrokeElements[i],
+                circleFillElements[i], circleStrokeElements[i],
+                isLeftToRights[i]
+            )
+        );
 }
 
 /**
@@ -192,58 +200,68 @@ function createTextSetters(ownerDocument) {
  * before the menu is initialized.
  *
  * @param {MouseEvent} event The mouse event.
+ * @param {HTMLIFrameElement} iframe The iframe containing the menu.
+ * @param {Object.<string, *>} config The add-on configuration.
  */
-function initialize(event, iframe) {
-    self.port.on("pageState", onPageState);
+function initialize(event, iframe, config) {
+    iframe.style.display = 'inline';
 
-    iframe.style.display = "inline";
-
-    var ownerDocument = iframe.contentDocument;
+    const ownerDocument = iframe.contentDocument;
 
     /** The element representing the entire menu including labels */
-    var menuNode = ownerDocument.getElementById("menu");
+    const menuNode = ownerDocument.getElementById('menu');
 
     // If the page is zoomed, it seems that content size may be rounded up
     // while iframe size may be rounded down.
     // I am not sure this is specified.
-    // FIXME: assuming menuNode.getAttribute("width") is in px.
-    iframe.style.width = parseInt(menuNode.getAttribute("width")) + 1 + "px";
-    iframe.style.height = parseInt(menuNode.getAttribute("height")) + 1 + "px";
+    // FIXME: assuming menuNode.getAttribute('width') is in px.
+    iframe.style.width = parseInt(menuNode.getAttribute('width')) + 1 + 'px';
+    iframe.style.height = parseInt(menuNode.getAttribute('height')) + 1 + 'px';
 
     /** The element representing the outer ring. */
-    var outer = ownerDocument.getElementById("outer");
+    const outer = ownerDocument.getElementById('outer');
 
     /** The element representing the inner hole. */
-    var hole = ownerDocument.getElementById("hole");
+    const hole = ownerDocument.getElementById('hole');
 
     /** The elements representing the menu item icons. */
-    var itemElements = getNumberedElements(ownerDocument, "item");
+    const itemElements = getNumberedElements(ownerDocument, 'item');
 
     /** The elements representing the children indicator. */
-    var markerElements = getNumberedElements(ownerDocument, "marker");
+    const markerElements = getNumberedElements(ownerDocument, 'marker');
 
     /**
      * An array of functions setting label text.
      * Passing null to functions hides balloon.
      */
-    var textSetters = createTextSetters(ownerDocument);
+    const textSetters = createTextSetters(ownerDocument);
 
-    var menu = new PieMenu(iframe,
-                           menuNode,
-                           outer,
-                           hole,
-                           itemElements,
-                           markerElements,
-                           textSetters,
-                           contexts,
-                           menuFilters,
-                           self.options.config,
-                           self.options.localizedLabels);
+    const menu = new PieMenu(
+        iframe,
+        menuNode,
+        outer,
+        hole,
+        itemElements,
+        markerElements,
+        textSetters,
+        contexts,
+        menuFilters,
+        config
+    );
 
     loadIconsAsync(ownerDocument);
 
-    self.port.on("configChanged", menu.setConfig.bind(menu));
     menu.onMouseDown(event);
+
+    browser.storage.onChanged.addListener((changes, areaName) => {
+        if (areaName !== 'local') {
+            return;
+        }
+
+        Object.keys(changes).forEach(key => {
+            menu.config[key] = changes[key].newValue;
+        });
+    });
 }
 
 /**
@@ -254,23 +272,59 @@ function loadIconsAsync(ownerDocument) {
     // xlink:href does not work neither.
     // Using iframe instead.
 
-    var iframe = document.createElement("iframe");
+    const iframe = document.createElement('iframe');
 
-    iframe.src = "res-compass-menu-at-tatapa-dot-org://compass_menu-at-tatapa-dot-org/data/menu_icons.svg";
+    iframe.src = browser.extension.getURL('data/menu_icons.svg');
 
-    iframe.onload = function() {
-        ownerDocument.documentElement.appendChild(iframe.contentDocument.getElementById("icon_defs"));
+    iframe.onload = () => {
+        ownerDocument.documentElement.appendChild(
+            iframe.contentDocument.getElementById('icon_defs')
+        );
         document.body.removeChild(iframe);
     };
 
-    iframe.style.display = "none";
+    iframe.style.display = 'none';
 
     document.body.appendChild(iframe);
 }
 
-self.port.on("configChanged", function(config) {
-                 self.options.config = config;
-             });
+/**
+ * @return {Promise.<Object.<string, *>>} Configuration of the add-on.
+ */
+async function getConfiguration() {
+    return await browser.storage.local.get({
+        /** The mouse button to open the menu. */
+        openButton: 2,
+
+        /** If true, opens the menu only if Ctrl key is pressed.  */
+        requireCtrl: false,
+
+        /** If true, opens the menu only if Shift key is pressed.  */
+        requireShift: false,
+
+        /**
+         * If true, does not open the menu if Ctrl key is pressed.
+         *
+         * If both isCtrlSupress and isShiftSupress is true,
+         * does not open the menu if both Ctrl and Shift key is pressed.
+         */
+        isCtrlSupress: false,
+
+        /**
+         * If true, does not open the menu if Shift key is pressed.
+         *
+         * If both isCtrlSupress and isShiftSupress is true,
+         * does not open the menu if both Ctrl and Shift key is pressed.
+         */
+        isShiftSupress: true,
+
+        /**
+         * The delay in milliseconds from opening the menu to
+         * showing the labels.
+         */
+        labelDelay: 500,
+    });
+}
 
 /**
  * Injects an iframe element into body and adds an event listener for
@@ -278,46 +332,46 @@ self.port.on("configChanged", function(config) {
  *
  * The function is called when the body element is inserted.
  */
-function onBodyAdded() {
+async function onBodyAdded() {
     // document.body.dataset seems not to be ready.
     if (document.documentElement.getAttribute('data-supress-compass-menu')) {
         // The document is the menu itself
         // (or some document not willing CompassMenu).
         // Supressing the menu.
 
-        self.options = null;
-
         return;
     }
 
-    var iframe = document.createElement("iframe");
+    const config = await getConfiguration();
 
-    iframe.style.borderStyle = "none";
-    iframe.style.outline = "none";
-    iframe.style.backgroundColor = "transparent";
-    iframe.style.position = "absolute";
-    iframe.style.margin = "0";
-    iframe.style.padding = "0";
-    iframe.style.zIndex = "2147483647";
-    iframe.style.display = "none";
+    const iframe = document.createElement('iframe');
 
-    iframe.src = "res-compass-menu-at-tatapa-dot-org://compass_menu-at-tatapa-dot-org/data/menu.svg";
+    iframe.style.borderStyle = 'none';
+    iframe.style.outline = 'none';
+    iframe.style.backgroundColor = 'transparent';
+    iframe.style.position = 'absolute';
+    iframe.style.margin = '0';
+    iframe.style.padding = '0';
+    iframe.style.zIndex = '2147483647';
+    iframe.style.display = 'none';
+
+    iframe.src = browser.extension.getURL('data/menu.svg');
 
     document.body.appendChild(iframe);
 
     function listener(event) {
-        window.removeEventListener("mousedown", listener, false);
+        window.removeEventListener('mousedown', listener, false);
 
-        initialize(event, iframe);
+        initialize(event, iframe, config);
     };
 
-    window.addEventListener("mousedown", listener, false);
+    window.addEventListener('mousedown', listener, false);
 }
 
 if (document.body) {
     onBodyAdded();
 } else {
-    var onMutate = function(records) {
+    const onMutate = (records) => {
         if (document.body) {
             mutationObserver.disconnect();
 
@@ -325,9 +379,11 @@ if (document.body) {
         }
     };
 
-    var mutationObserver = new MutationObserver(onMutate);
+    const mutationObserver = new MutationObserver(onMutate);
 
-    mutationObserver.observe(document.documentElement, {
-                                 childList: true
-                             });
+    mutationObserver.observe(
+        document.documentElement, {
+            childList: true
+        }
+    );
 }

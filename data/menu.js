@@ -14,7 +14,7 @@
  * the menu SVG node.
  */
 
-"use strict";
+'use strict';
 
 // FIXME What happens if CSS transforms are applied to
 //       the body element and/or iframe element?
@@ -30,836 +30,1021 @@
  *
  * The index of the menu item begins from 0 to 7.
  * The right item has the index 0.  The index increases clockwise.
- *
- * @constructor
- *
- * @param {Node} container An absolute-positioned node containing the menu.
- * @param {SVGLocatable} menuNode A SVG element represents menu.
- * @param {SVGLocatable} outer A SVG element represents
- *     the outer circle of the menu.
- * @param {SVGLocatable} hole A SVG element represents the hole of the menu.
- * @param {Array.<SVGStylable>} itemElements
- *     An array of SVG elements represents menu item.
- * @param {Array.<SVGStylable>} markerElements
- *     An array of SVG elements represents children indicator.
- * @param {Array.<function(string)>} textSetters
- *     An array of functions setting label text.
- *     Passing null to functions hides balloon.
- * @param {Object.<string, Array.<?types.MenuItem>>} context
- *     An map from context names to arrays of menu items.
- * @param {Array.<types.MenuFilter>} menuFilters
- *     An array of menu filters.
- * @param {Object.<string, *>} config A configuration.
- * @param {Object.<string, string>} localizedLabels
- *   An map from label keys to localized label strings.
  */
-function PieMenu(container, menuNode, outer, hole,
-                 itemElements, markerElements,
-                 textSetters,
-                 contexts, menuFilters, config,
-                 localizedLabels) {
-    if (!(this instanceof PieMenu)) {
-        return new PieMenu(container, menuNode, outer, hole,
-                           itemElements, markerElements,
-                           textSetters,
-                           contexts, menuFilters, config,
-                           localizedLabels);
-    }
+class PieMenu {
+    /**
+     * @param {Node} container An absolute-positioned node containing the menu.
+     * @param {SVGLocatable} menuNode A SVG element represents menu.
+     * @param {SVGLocatable} outer A SVG element represents
+     *     the outer circle of the menu.
+     * @param {SVGLocatable} hole A SVG element represents the hole of the menu.
+     * @param {Array.<SVGStylable>} itemElements
+     *     An array of SVG elements represents menu item.
+     * @param {Array.<SVGStylable>} markerElements
+     *     An array of SVG elements represents children indicator.
+     * @param {Array.<function (string)>} textSetters
+     *     An array of functions setting label text.
+     *     Passing null to functions hides balloon.
+     * @param {Object.<string, Array.<?types.MenuItem>>} context
+     *     An map from context names to arrays of menu items.
+     * @param {Array.<types.MenuFilter>} menuFilters
+     *     An array of menu filters.
+     * @param {Object.<string, *>} config A configuration.
+     */
+    constructor(
+        container, menuNode, outer, hole,
+        itemElements, markerElements,
+        textSetters,
+        contexts, menuFilters, config
+    ) {
+        this.container = container;
+        this.menuNode = menuNode;
+        this.outer = outer;
+        this.radius = outer.getBBox().width / 2;
+        this.holeRadius = hole.getBBox().width / 2;
+        this.itemElements = itemElements;
+        this.markerElements = markerElements;
+        this.textSetters = textSetters;
+        this.contexts = contexts;
+        this.items = contexts['page'];
+        this.menuFilters = menuFilters;
+        this.config = config;
+        this.stopped = false;
 
-    this.container = container;
-    this.menuNode = menuNode;
-    this.outer = outer;
-    this.radius = outer.getBBox().width / 2;
-    this.holeRadius = hole.getBBox().width / 2;
-    this.itemElements = itemElements;
-    this.markerElements = markerElements;
-    this.textSetters = textSetters;
-    this.contexts = contexts;
-    this.items = contexts['page'];
-    this.menuFilters = menuFilters;
-    this.config = config;
-    this.localizedLabels = localizedLabels;
+        this.variantIndex = 0;
+        this.labelVisible = false;
 
-    this.variantIndex = 0;
-    this.labelVisible = false;
+        this.lastPoint = null;
+        this.labelTimerID = null;
+        this.lastScrollPosition = null;
+        this.scrollEventPending = false;
 
-    this.lastPoint = null;
-    this.labelTimerID = null;
+        const containerWindow = container.ownerDocument.defaultView;
+        const menuWindow = menuNode.ownerDocument.defaultView;
 
-    var containerWindow = container.ownerDocument.defaultView;
-    var menuWindow = menuNode.ownerDocument.defaultView;
+        let windows;
 
-    var windows;
-
-    if (containerWindow === menuWindow) {
-        windows = [containerWindow];
-    } else {
-        windows = [containerWindow, menuWindow];
-    }
-
-    function registerEventListener(win) {
-        function doRegister(name, handler) {
-            win.addEventListener(name, handler.bind(this), false);
-        }
-
-        doRegister = doRegister.bind(this);
-        
-        doRegister("mousedown", this.onMouseDown);
-        doRegister("mouseup", this.onMouseUp);
-        doRegister("mousemove", this.onMouseMove);
-        doRegister("scroll", this.onScroll);
-        doRegister("keydown", this.onKeyDown);
-        doRegister("keyup", this.onKeyUp);
-        doRegister("contextmenu", this.onContextMenu);
-    }
-
-    windows.forEach(registerEventListener, this);
-
-    this.state = new PieMenu.states.Initial(this, config);
-
-    return this;
-}
-
-/**
- * @return {SVGPoint} The center point of the menu, in the user coordinates.
- */
-PieMenu.prototype.getCenter = function() {
-    var box = this.outer.getBBox();
-
-    var transform = this.outer.getTransformToElement(this.menuNode);
-
-    var centerX = box.x + box.width / 2;
-    var centerY = box.y + box.height / 2;
-
-    return new Vector2D(centerX, centerY).applyTransform(transform);
-};
-
-/**
- * @return {SVGMatrix}
- *    The transforming matrix from the client coordinates
- *    (i.e. coordinates for MouseEvent#clientX) to user coordinates.
- */
-PieMenu.prototype.getClientToUser = function() {
-    return this.menuNode.getScreenCTM().inverse();
-};
-
-/**
- * @return {Vector2D}
- *   The client position of the mouse cursor in inner window coordinates.
- * @param {MouseEvent} event The mouse event.
- */
-PieMenu.prototype.getClientPosition = function(event) {
-    var containerWindow = this.container.ownerDocument.defaultView;
-    var menuWindow = this.menuNode.ownerDocument.defaultView;
-
-    var windowOffset;
-
-    if (containerWindow === event.target.ownerDocument.defaultView) {
-        var boundingClientRect = this.container.getBoundingClientRect();
-
-        windowOffset =
-            new Vector2D(-boundingClientRect.left, -boundingClientRect.top);
-    } else {
-        windowOffset = new Vector2D(0, 0);
-    }
-
-    return new Vector2D(event.clientX, event.clientY).plus(windowOffset);
-};
-
-/**
- * @return {SVGSVGElement} The owner "svg" element of the menu.
- */
-PieMenu.prototype.getOwnerSVGElement = function() {
-    var ownerSVGElement = this.menuNode.ownerSVGElement;
-
-    return (ownerSVGElement === null) ? this.menuNode : ownerSVGElement;
-};
-
-/**
- * @param {number} x The translation amount in X.
- * @param {number} y The translation amount in Y.
- *
- * @return {SVGTransform} A SVGTransform that translates point.
- */
-PieMenu.prototype.createTranslateTransform = function(x, y) {
-    var transform = this.getOwnerSVGElement().createSVGTransform();
-
-    transform.setTranslate(x, y);
-
-    return transform;
-};
-
-/**
- * Moves the menu or opens a sub menu, depending on the mouse cursor position.
- *
- * If the mouse cursor position is within the menu, does nothing.
- * Otherwise, if the nearest menu item has a sub menu, opens it.
- * Otherwise, moves the menu.
- *
- * If the mouse cursor position is omitted, the last point is used.
- *
- * @param {{x: number, y: number}=} point The mouse cursor position,
- *     in the user coordinates.
- */
-PieMenu.prototype.follow = function(point) {
-    if (arguments.length == 0) {
-        point = this.lastPoint;
-    } else {
-        this.lastPoint = point;
-    }
-
-    var center = this.getCenter();
-    var distanceSq = center.distanceSquared(point);
-
-    if (distanceSq > this.radius * this.radius) {
-        var index = this.getItemIndex(point, center);
-
-        if (this.hasChildren(index)) {
-            this.openAt(point, this.getChildrenAt(index));
+        if (containerWindow === menuWindow) {
+            windows = [containerWindow];
         } else {
-            this.doFollow(point, center);
+            windows = [containerWindow, menuWindow];
         }
-    }
-};
 
-/**
- * Moves the menu.
- *
- * @param {{x: number, y: number}} point The mouse cursor position,
- *     in the user coordinates.
- * @param {{x: number, y: number}} center The center position,
- *     in the user coordinates.
- * @protected
- */
-PieMenu.prototype.doFollow = function(point, center) {
-    var diff = point.diff(center);
+        function registerEventListener(win) {
+            function doRegister(name, handler, passive) {
+                win.addEventListener(name, handler.bind(this), {
+                    capture: false,
+                    passive: passive || false,
+                });
+            }
 
-    var movement = diff.normalize().scale(diff.norm() - this.radius);
+            doRegister = doRegister.bind(this);
 
-    this.moveBy(movement);
+            doRegister('mousedown', this.onMouseDown);
+            doRegister('mouseup', this.onMouseUp);
+            doRegister('mousemove', this.onMouseMove);
+            doRegister('scroll', this.onScroll, true);
+            doRegister('keydown', this.onKeyDown);
+            doRegister('keyup', this.onKeyUp);
+            doRegister('contextmenu', this.onContextMenu);
+        }
 
-    this.hideLabelTexts();
-};
+        windows.forEach(registerEventListener, this);
 
-/**
- * Moves the menu by the given offset.
- *
- * @param {{x: number, y: number}} movement The amount of the movement,
- *     in the user coordinates.
- */
-PieMenu.prototype.moveBy = function(movement) {
-    if (this.container.transform) {
-        var translate = this.createTranslateTransform(movement.x, movement.y);
-        var currentTransform = this.container.transform.baseVal;
+        this.state = new PieMenu.states.Initial(this, config);
 
-        currentTransform.appendItem(translate, 0);
-        currentTransform.consolidate();
-    } else {
-        var clientPosition =
-            new Vector2D(this.container.offsetLeft, this.container.offsetTop);
-
-        var clientMovement =
-            movement.applyTransform(this.getClientToUser().inverse());
-
-        var newPosition = clientPosition.plus(clientMovement);
-
-        this.container.style.left = newPosition.x + "px";
-        this.container.style.top = newPosition.y + "px";
-    }
-};
-
-/**
- * @return {number} The index of the nearest menu item to
- *     the mouse cursor position.
- *
- * @param {{x: number, y: number}} point The mouse cursor position,
- *     in the user coordinates.
- * @param {{x: number, y: number}=} center The center point of the menu,
- *     in the user coordinates.
- */
-PieMenu.prototype.getItemIndex = function(point, center) {
-    if (!center) {
-        center = this.getCenter();
+        return this;
     }
 
-    var TwoPI = 2 * Math.PI;
+    /**
+     * @return {Vector2D} The center point of the menu, in the user coordinates.
+     */
+    getCenter() {
+        const box = this.outer.getBBox();
 
-    var diff = point.diff(center);
+        const transform = this.outer.getTransformToElement(this.menuNode);
 
-    var theta = Math.atan2(diff.y, diff.x);
+        const centerX = box.x + box.width / 2;
+        const centerY = box.y + box.height / 2;
 
-    if (theta < 0) {
-        theta += TwoPI;
+        return new Vector2D(centerX, centerY).applyTransform(transform);
     }
 
-    if (15 / 16.0 * TwoPI < theta || theta <=  1 / 16.0 * TwoPI) {
-        return 0;
-    } else {
-        return Math.floor((theta + 1 / 16.0 * TwoPI) * 8 / TwoPI);
+    /**
+     * @return {SVGMatrix}
+     *    The transforming matrix from the client coordinates
+     *    (i.e. coordinates for MouseEvent#clientX) to user coordinates.
+     */
+    getClientToUser() {
+        return this.menuNode.getScreenCTM().inverse();
     }
-};
 
-/**
- * Returns the current menu item variant.
- *
- * If the current variant is the secondary variant and the secondary variant is
- * not defined, the primary variant is returnd.
- *
- * @return {types.Variant} The current menu item variant.
- * @param {number} index The index of the menu item.
- */
-PieMenu.prototype.getVariant = function(index) {
-    var item = this.items[index];
+    /**
+     * @return {Vector2D}
+     *   The client position of the mouse cursor in inner window coordinates.
+     * @param {MouseEvent} event The mouse event.
+     */
+    getClientPosition(event) {
+        const containerWindow = this.container.ownerDocument.defaultView;
+        const menuWindow = this.menuNode.ownerDocument.defaultView;
+        const eventWindow = event.target.ownerDocument ?
+                  event.target.ownerDocument.defaultView : null;
 
-    if (item && item.length > 0) {
-        var variant = item[this.variantIndex];
+        let windowOffset;
 
-        if (variant) {
-            return variant;
+        if (containerWindow === eventWindow) {
+            const boundingClientRect = this.container.getBoundingClientRect();
+
+            windowOffset =
+                new Vector2D(-boundingClientRect.left, -boundingClientRect.top);
         } else {
-            return item[0];
+            windowOffset = new Vector2D(0, 0);
         }
-    } else {
-        return null;
-    }
-};
 
-/**
- * @return {boolean} true iff the menu item at given index has a sub menu.
- *
- * @param {number} index The index of the menu item.
- */
-PieMenu.prototype.hasChildren = function(index) {
-    var variant = this.getVariant(index);
-
-    return variant && variant.children && variant.children.length > 0;
-};
-
-/**
- * @return {types.MenuItem} The sub menu items at given index.
- *
- * @param {number} index The index of the menu item.
- */
-PieMenu.prototype.getChildrenAt = function(index) {
-    return this.getVariant(index).children;
-};
-
-/**
- * Opens the menu at given position.
- *
- * If items, target, or pageState are specified,
- * this method updates the menu.
- *
- * @param {{x: number, y: number}} center The new position of the center.
- * @param {Array.<?type.MenuItem>=} items The new menu items.
- * @param {Node=} target The node on which the user pressed the mouse button.
- * @param {type.PageState=} pageState The state of the page.
- */
-PieMenu.prototype.openAt = function(center, items, target, pageState) {
-    this.container.style.display = "inline";
-
-    if (target) {
-        this.target = target;
-
-        // To get keypress events for alt keys.
-        target.ownerDocument.defaultView.focus();
-        target.focus();
-    } else {
-        target = this.target;
+        return new Vector2D(event.clientX, event.clientY).plus(windowOffset);
     }
 
-    if (pageState) {
-        this.pageState = pageState;
-    } else {
-        pageState = this.pageState;
+    /**
+     * @return {SVGSVGElement} The owner 'svg' element of the menu.
+     */
+    getOwnerSVGElement() {
+        const ownerSVGElement = this.menuNode.ownerSVGElement;
+
+        return (ownerSVGElement === null) ? this.menuNode : ownerSVGElement;
     }
 
-    if (items) {
-        var config = this.config;
+    /**
+     * @param {number} x The translation amount in X.
+     * @param {number} y The translation amount in Y.
+     *
+     * @return {SVGTransform} A SVGTransform that translates point.
+     */
+    createTranslateTransform(x, y) {
+        const transform = this.getOwnerSVGElement().createSVGTransform();
 
-        var modifyItems = function(menuFilter) {
-            var modifyItem = function(item) {
-                return menuFilter(target, pageState, item, config);
-            };
+        transform.setTranslate(x, y);
 
-            items = items.map(modifyItem);
-        };
-
-        this.menuFilters.forEach(modifyItems);
-
-        this.items = items;
+        return transform;
     }
 
-    var oldCenter = this.getCenter();
+    /**
+     * Follows scroll movement.
+     *
+     * @param {Vector2D} scrollPosition The current scroll position,
+     *   i.e. (window.scrollX, window.scrollY)
+     */
+    followScroll(scrollPosition) {
+        const diff = scrollPosition.diff(this.lastScrollPosition);
+        const point = this.lastPoint.plus(diff);
 
-    this.moveBy(center.diff(oldCenter));
+        this.follow(point);
 
-    this.updateIcons();
+        this.lastScrollPosition = scrollPosition;
+    }
 
-    this.hideLabelTexts();
-    this.resetLabelTimer();
-};
-
-/**
- * Updates icons.
- */
-PieMenu.prototype.updateIcons = function() {
-    for (var i = 0; i < 8; i++) {
-        var variant = this.getVariant(i);
-
-        if (variant) {
-            var itemElement = this.itemElements[i];
-
-            itemElement.style.display = "inline";
-            itemElement.setAttributeNS("http://www.w3.org/1999/xlink",
-                                       "href",
-                                       variant.icon);
-
-            var hasChildren = variant.children && variant.children.length > 0;
-
-            this.markerElements[i].style.display =
-                hasChildren ? "inline" : "none";
+    /**
+     * Moves the menu or opens a sub menu, depending on the mouse cursor position.
+     *
+     * If the mouse cursor position is within the menu, does nothing.
+     * Otherwise, if the nearest menu item has a sub menu, opens it.
+     * Otherwise, moves the menu.
+     *
+     * If the mouse cursor position is omitted, the last point is used.
+     *
+     * @param {{x: number, y: number}=} point The mouse cursor position,
+     *     in the user coordinates.
+     */
+    follow(point) {
+        if (arguments.length == 0) {
+            point = this.lastPoint;
         } else {
-            this.itemElements[i].style.display = "none";
-            this.markerElements[i].style.display = "none";
+            this.lastPoint = point;
+        }
+
+        const center = this.getCenter();
+        const distanceSq = center.distanceSquared(point);
+
+        if (distanceSq > this.radius * this.radius) {
+            const index = this.getItemIndex(point, center);
+
+            if (this.hasChildren(index)) {
+                this.openAt(point, this.getChildrenAt(index));
+            } else {
+                this.doFollow(point, center);
+            }
         }
     }
-};
 
-/**
- * Resets the timer showing label texts.
- */
-PieMenu.prototype.resetLabelTimer = function() {
-    this.clearLabelTimer();
+    /**
+     * Moves the menu.
+     *
+     * @param {{x: number, y: number}} point The mouse cursor position,
+     *     in the user coordinates.
+     * @param {{x: number, y: number}} center The center position,
+     *     in the user coordinates.
+     * @protected
+     */
+    doFollow(point, center) {
+        const diff = point.diff(center);
 
-    this.labelTimerID =
-        setTimeout(this.updateLabelTexts.bind(this), this.config.labelDelay);
-};
+        const movement = diff.normalize().scale(diff.norm() - this.radius);
 
-/**
- * Clears the timer showing label texts.
- */
-PieMenu.prototype.clearLabelTimer = function() {
-    if (this.labelTimerID) {
-        clearTimeout(this.labelTimerID);
+        this.moveBy(movement);
+
+        this.lastPoint = this.lastPoint.diff(movement);
+
+        this.hideLabelTexts();
     }
-};
 
-/**
- * Hides the label texts.
- */
-PieMenu.prototype.hideLabelTexts = function() {
-    for (let textSetter of this.textSetters) {
-        textSetter(null);
+    /**
+     * Moves the menu by the given offset.
+     *
+     * @param {{x: number, y: number}} movement The amount of the movement,
+     *     in the user coordinates.
+     */
+    moveBy(movement) {
+        if (this.container.transform) {
+            const translate = this.createTranslateTransform(
+                movement.x, movement.y
+            );
+            const currentTransform = this.container.transform.baseVal;
+
+            currentTransform.appendItem(translate, 0);
+            currentTransform.consolidate();
+        } else {
+            const clientPosition = new Vector2D(
+                this.container.offsetLeft, this.container.offsetTop
+            );
+
+            const clientMovement =
+                      movement.applyTransform(this.getClientToUser().inverse());
+
+            const newPosition = clientPosition.plus(clientMovement);
+
+            this.container.style.left = newPosition.x + 'px';
+            this.container.style.top = newPosition.y + 'px';
+        }
     }
-    this.labelVisible = false;
-    this.clearLabelTimer();
-};
 
-/**
- * Updates the label texts if the labels are visible.
- */
-PieMenu.prototype.updateLabelTextsIfVisible = function() {
-    if (this.labelVisible) {
-        this.updateLabelTexts();
-    } else {
+    /**
+     * @return {number} The index of the nearest menu item to
+     *     the mouse cursor position.
+     *
+     * @param {{x: number, y: number}} point The mouse cursor position,
+     *     in the user coordinates.
+     * @param {{x: number, y: number}=} center The center point of the menu,
+     *     in the user coordinates.
+     */
+    getItemIndex(point, center) {
+        if (!center) {
+            center = this.getCenter();
+        }
+
+        const TwoPI = 2 * Math.PI;
+
+        const diff = point.diff(center);
+
+        let theta = Math.atan2(diff.y, diff.x);
+
+        if (theta < 0) {
+            theta += TwoPI;
+        }
+
+        if (15 / 16.0 * TwoPI < theta || theta <=  1 / 16.0 * TwoPI) {
+            return 0;
+        } else {
+            return Math.floor((theta + 1 / 16.0 * TwoPI) * 8 / TwoPI);
+        }
+    }
+
+    /**
+     * Returns the current menu item variant.
+     *
+     * If the current variant is the secondary variant and the secondary
+     * variant is not defined, the primary variant is returnd.
+     *
+     * @return {types.Variant} The current menu item variant.
+     * @param {number} index The index of the menu item.
+     */
+    getVariant(index) {
+        const item = this.items[index];
+
+        if (item && item.length > 0) {
+            const variant = item[this.variantIndex];
+
+            if (variant) {
+                return variant;
+            } else {
+                return item[0];
+            }
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @return {boolean} true iff the menu item at given index has a sub menu.
+     *
+     * @param {number} index The index of the menu item.
+     */
+    hasChildren(index) {
+        const variant = this.getVariant(index);
+
+        return variant && variant.children && variant.children.length > 0;
+    }
+
+    /**
+     * @return {types.MenuItem} The sub menu items at given index.
+     *
+     * @param {number} index The index of the menu item.
+     */
+    getChildrenAt(index) {
+        return this.getVariant(index).children;
+    }
+
+    /**
+     * Opens the menu at given position.
+     *
+     * If items, target, or pageState are specified,
+     * this method updates the menu.
+     *
+     * @param {{x: number, y: number}} center The new position of the center.
+     * @param {Array.<?type.MenuItem>=} items The new menu items.
+     * @param {Node=} target
+     *   The node on which the user pressed the mouse button.
+     * @param {type.PageState=} pageState The state of the page.
+     */
+    openAt(center, items, target, pageState) {
+        this.container.style.display = 'inline';
+
+        if (target) {
+            this.target = target;
+
+            // To get keypress events for alt keys.
+            target.ownerDocument.defaultView.focus();
+            target.focus();
+        } else {
+            target = this.target;
+        }
+
+        if (pageState) {
+            this.pageState = pageState;
+        } else {
+            pageState = this.pageState;
+        }
+
+        if (items) {
+            const config = this.config;
+
+            this.items = this.menuFilters.reduce(
+                (items, menuFilter) => items.map(
+                    (item) => menuFilter(target, pageState, item, config)
+                ),
+                items
+            );
+        }
+
+        const oldCenter = this.getCenter();
+
+        this.moveBy(center.diff(oldCenter));
+
+        this.updateIcons();
+
         this.hideLabelTexts();
         this.resetLabelTimer();
     }
-}
 
-/**
- * Updates the label texts.
- */
-PieMenu.prototype.updateLabelTexts = function() {
-    for (var i = 0; i < 8; i++) {
-        var variant = this.getVariant(i);
+    /**
+     * Updates icons.
+     */
+    updateIcons() {
+        for (let i = 0; i < 8; i++) {
+            const variant = this.getVariant(i);
 
-        var textSetter = this.textSetters[i];
+            if (variant) {
+                const itemElement = this.itemElements[i];
 
-        if (variant) {
-            var localizedLabel = this.localizedLabels[variant.label];
+                itemElement.style.display = 'inline';
+                itemElement.setAttributeNS(
+                    'http://www.w3.org/1999/xlink',
+                    'href',
+                    variant.icon
+                );
 
-            if (!localizedLabel) {
-                localizedLabel = variant.label;
+                const hasChildren = variant.children &&
+                          variant.children.length > 0;
+
+                this.markerElements[i].style.display =
+                    hasChildren ? 'inline' : 'none';
+            } else {
+                this.itemElements[i].style.display = 'none';
+                this.markerElements[i].style.display = 'none';
             }
+        }
+    }
 
-            textSetter(localizedLabel);
-        } else {
+    /**
+     * Resets the timer showing label texts.
+     */
+    resetLabelTimer() {
+        this.clearLabelTimer();
+
+        this.labelTimerID = setTimeout(
+            this.updateLabelTexts.bind(this), this.config.labelDelay
+        );
+    }
+
+    /**
+     * Clears the timer showing label texts.
+     */
+    clearLabelTimer() {
+        if (this.labelTimerID) {
+            clearTimeout(this.labelTimerID);
+        }
+    }
+
+    /**
+     * Hides the label texts.
+     */
+    hideLabelTexts() {
+        for (let textSetter of this.textSetters) {
             textSetter(null);
         }
+        this.labelVisible = false;
+        this.clearLabelTimer();
     }
-    this.labelVisible = true;
-};
 
-/**
- * Activates the nearest menu item to the mouse cursor.
- *
- * Does nothing if the nearest menu item is empty.
- *
- * @param {{x: number, y: number}} point The mouse cursor position.
- */
-PieMenu.prototype.activateItemAt = function(point) {
-    var center = this.getCenter();
-    var distanceSq = center.distanceSquared(point);
-
-    if (distanceSq > this.holeRadius * this.holeRadius) {
-        var index = this.getItemIndex(point);
-        var variant = this.getVariant(index);
-
-        if (variant && variant.action) {
-            // Since some commands assume the current frame is the frame
-            // containing the target node.
-            this.target.ownerDocument.defaultView.focus();
-            variant.action(this);
+    /**
+     * Updates the label texts if the labels are visible.
+     */
+    updateLabelTextsIfVisible() {
+        if (this.labelVisible) {
+            this.updateLabelTexts();
+        } else {
+            this.hideLabelTexts();
+            this.resetLabelTimer();
         }
     }
-};
 
-/**
- * Hides the menu.
- */
-PieMenu.prototype.hide = function() {
-    this.container.style.display = "none";
-    this.hideLabelTexts();
-};
+    /**
+     * Updates the label texts.
+     */
+    updateLabelTexts() {
+        for (let i = 0; i < 8; i++) {
+            const variant = this.getVariant(i);
 
-/**
- * Sets variants.
- *
- * @param {number} variantIndex The new variant index.
- */
-PieMenu.prototype.setVariant = function(variantIndex) {
-    this.variantIndex = variantIndex;
-    this.updateIcons();
-    this.updateLabelTextsIfVisible();
-};
+            const textSetter = this.textSetters[i];
 
-/**
- * Sets a configuration.
- *
- * @param {Object.<string, *>} config A configuration.
- */
-PieMenu.prototype.setConfig = function(config) {
-    this.config = config;
-    this.state.config = config;
-};
+            if (variant) {
+                let localizedLabel = browser.i18n.getMessage(variant.label);
 
-/**
- * Handles mousedown events
- *
- * @param {MouseEvent} event The mouse event object.
- */
-PieMenu.prototype.onMouseDown = function(event) {
-    if (this.state.onMouseDown && !event.defaultPrevented) {
-        this.state.onMouseDown(event);
+                if (!localizedLabel) {
+                    localizedLabel = variant.label;
+                }
+
+                textSetter(localizedLabel);
+            } else {
+                textSetter(null);
+            }
+        }
+        this.labelVisible = true;
     }
-};
 
-/**
- * Handles mouserelease events
- *
- * @param {MouseEvent} event The mouse event object.
- */
-PieMenu.prototype.onMouseUp = function(event) {
-    if (this.state.onMouseUp && !event.defaultPrevented) {
-        this.state.onMouseUp(event);
-    }
-};
+    /**
+     * Activates the nearest menu item to the mouse cursor.
+     *
+     * Does nothing if the nearest menu item is empty.
+     *
+     * @param {{x: number, y: number}} point The mouse cursor position.
+     */
+    activateItemAt(point) {
+        const center = this.getCenter();
+        const distanceSq = center.distanceSquared(point);
 
-/**
- * Handles mousemove events
- *
- * @param {MouseEvent} event The mouse event object.
- */
-PieMenu.prototype.onMouseMove = function(event) {
-    if (this.state.onMouseMove && !event.defaultPrevented) {
-        this.state.onMouseMove(event);
-    }
-};
+        if (distanceSq > this.holeRadius * this.holeRadius) {
+            const index = this.getItemIndex(point);
+            const variant = this.getVariant(index);
 
-/**
- * Handles scroll events
- *
- * @param {Event} event The event object.
- */
-PieMenu.prototype.onScroll = function(event) {
-    if (this.state.onScroll && !event.defaultPrevented) {
-        this.state.onScroll(event);
+            if (variant && variant.action) {
+                // Since some commands assume the current frame is the frame
+                // containing the target node.
+                this.target.ownerDocument.defaultView.focus();
+                variant.action(this);
+            }
+        }
     }
-};
 
-/**
- * Handles keydown events
- *
- * @param {KeyboardEvent} event The keyboard event object.
- */
-PieMenu.prototype.onKeyDown = function(event) {
-    if (this.state.onKeyDown && !event.defaultPrevented) {
-        this.state.onKeyDown(event);
+    /**
+     * Hides the menu.
+     */
+    hide() {
+        this.container.style.display = 'none';
+        this.hideLabelTexts();
     }
-};
 
-/**
- * Handles keyup events
- *
- * @param {KeyboardEvent} event The keyboard event object.
- */
-PieMenu.prototype.onKeyUp = function(event) {
-    if (this.state.onKeyUp && !event.defaultPrevented) {
-        this.state.onKeyUp(event);
+    /**
+     * Sets variants.
+     *
+     * @param {number} variantIndex The new variant index.
+     */
+    setVariant(variantIndex) {
+        this.variantIndex = variantIndex;
+        this.updateIcons();
+        this.updateLabelTextsIfVisible();
     }
-};
 
-/**
- * Handles contextmenu events
- *
- * @param {KeyboardEvent} event The keyboard event object.
- */
-PieMenu.prototype.onContextMenu = function(event) {
-    if (this.state.onContextMenu && !event.defaultPrevented) {
-        this.state.onContextMenu(event);
+    /**
+     * Sets a configuration.
+     *
+     * @param {Object.<string, *>} config A configuration.
+     */
+    setConfig(config) {
+        this.config = config;
+        this.state.config = config;
     }
-};
+
+    /**
+     * Handles mousedown events
+     *
+     * @param {MouseEvent} event The mouse event object.
+     */
+    onMouseDown(event) {
+        if (this.state.onMouseDown && !event.defaultPrevented) {
+            this.state.onMouseDown(event);
+        }
+    }
+
+    /**
+     * Handles mouserelease events
+     *
+     * @param {MouseEvent} event The mouse event object.
+     */
+    onMouseUp(event) {
+        if (this.state.onMouseUp && !event.defaultPrevented) {
+            this.state.onMouseUp(event);
+        }
+    }
+
+    /**
+     * Handles mousemove events
+     *
+     * @param {MouseEvent} event The mouse event object.
+     */
+    onMouseMove(event) {
+        if (this.state.onMouseMove && !event.defaultPrevented) {
+            this.state.onMouseMove(event);
+        }
+    }
+
+    /**
+     * Handles scroll events
+     *
+     * @param {Event} event The event object.
+     */
+    onScroll(event) {
+        if (this.state.onScroll &&
+            !event.defaultPrevented &&
+            !this.scrollEventPending) {
+
+            window.requestAnimationFrame(() => {
+                this.state.onScroll(event);
+                this.scrollEventPending = false;
+            });
+
+            this.scrollEventPending = true;
+        }
+    }
+
+    /**
+     * Handles keydown events
+     *
+     * @param {KeyboardEvent} event The keyboard event object.
+     */
+    onKeyDown(event) {
+        if (this.state.onKeyDown && !event.defaultPrevented) {
+            this.state.onKeyDown(event);
+        }
+    }
+
+    /**
+     * Handles keyup events
+     *
+     * @param {KeyboardEvent} event The keyboard event object.
+     */
+    onKeyUp(event) {
+        if (this.state.onKeyUp && !event.defaultPrevented) {
+            this.state.onKeyUp(event);
+        }
+    }
+
+    /**
+     * Handles contextmenu events
+     *
+     * @param {KeyboardEvent} event The keyboard event object.
+     */
+    onContextMenu(event) {
+        if (this.state.onContextMenu && !event.defaultPrevented) {
+            this.state.onContextMenu(event);
+        }
+    }
+}
 
 //// State classes for the state patterns
 
 /**
  * State classes
  */
-PieMenu.states = {
+PieMenu.states = (() => {
     /**
      * The common super class for states showing the menu.
-     *
-     * @constructor
      */
-    ShowingState: function() {
-    },
+    class ShowingState {
+        /**
+         * Handles mousemove events.
+         *
+         * Moves the menu or opens a sub menu.
+         *
+         * @param {MouseEvent} The mouse event object.
+         */
+        onMouseMove(event) {
+            const clientToUser = this.menu.getClientToUser();
+            const point = this.menu.getClientPosition(event)
+                      .applyTransform(clientToUser);
+
+            this.menu.follow(point);
+            this.menu.resetLabelTimer();
+        }
+
+        /**
+         * Handles mousedown events.
+         *
+         * Selects the secondary variant.
+         *
+         * @param {MouseEvent} The mouse event object.
+         */
+        onMouseDown(event) {
+            this.menu.setVariant(1);
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        /**
+         * Handles mouseup events.
+         *
+         * Selects the primary variant.
+         *
+         * @param {MouseEvent} The mouse event object.
+         */
+        onMouseUp(event) {
+            this.menu.setVariant(0);
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        /**
+         * Handles context events.
+         *
+         * Prevents the default.
+         *
+         * @param {Event} The event object.
+         */
+        onContextMenu(event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        /**
+         * Handles keydown events.
+         *
+         * Selects the secondary variants if the alt key is pressed.
+         *
+         * @param {KeyboardEvent} The keyboard event object.
+         */
+        onKeyDown(event) {
+            if (event.altKey) {
+                this.menu.setVariant(1);
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            let isESCPressed;
+
+            if ('key' in event) {
+                isESCPressed = (event.key === 'Esc');
+            } else {
+                isESCPressed = (event.keyCode === event.DOM_VK_ESCAPE);
+            }
+
+            if (isESCPressed) {
+                this.menu.state = new Initial(this.menu, this.config);
+            }
+        }
+
+        /**
+         * Handles keyup events.
+         *
+         * Selects the primary variants if the alt key is released.
+         *
+         * @param {KeyboardEvent} The keyboard event object.
+         */
+        onKeyUp(event) {
+            if (!event.altKey) {
+                this.menu.setVariant(0);
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        }
+
+        /**
+         * Handles scroll events.
+         *
+         * Moves the menu or opens a sub menu.
+         *
+         * @param {MouseEvent} The mouse event object.
+         */
+        onScroll(event) {
+            const scrollPosition = new Vector2D(window.scrollX, window.scrollY);
+
+            this.menu.followScroll(scrollPosition);
+        }
+    }
 
     /**
      * The initial state. The menu is hidden
-     *
-     * @constructor
-     * @param {PieMenu} menu The menu.
-     * @param {Object} config The configurations.
      */
-    Initial: function(menu, config) {
-        this.menu = menu;
-        this.config = config;
+    class Initial {
+        /*
+         * @param {PieMenu} menu The menu.
+         * @param {Object} config The configurations.
+         */
+        constructor(menu, config) {
+            this.menu = menu;
+            this.config = config;
 
-        this.menu.setVariant(0);
+            this.menu.setVariant(0);
 
-        this.menu.hide();
-    },
+            this.menu.hide();
+        }
+
+        /**
+         * Handles context events.
+         *
+         * Prevents the default if going to open the menu.
+         *
+         * @param {Event} The event object.
+         */
+        onContextMenu(event) {
+            if (!this.isOpenButton(event) || this.isSupressed(event)) {
+                return;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        /**
+         * Handles mousedown events.
+         *
+         * If the correct button and modifiers is pressed, opens the menu and
+         * transits to the Pressed state.
+         *
+         * @param {MouseEvent} The mouse event object.
+         */
+        onMouseDown(event) {
+            if (!this.isOpenButton(event) || this.isSupressed(event)) {
+                return;
+            }
+
+            const menu = this.menu;
+            const config = this.config;
+
+            function openMenu(pageState) {
+                menu.container.style.display = 'inline';
+
+                const clientPosition = menu.getClientPosition(event);
+                const point = clientPosition.applyTransform(
+                    menu.getClientToUser()
+                );
+                const context = detectContext(event.target);
+
+                menu.container.style.display = 'inline';
+                menu.openAt(
+                    point, menu.contexts[context], event.target, pageState
+                );
+                menu.lastPoint = menu.getCenter();
+                menu.lastScrollPosition = new Vector2D(
+                    window.scrollX, window.scrollY
+                );
+            }
+
+            queryPageState()
+                .then(pageState => {
+                    // FIXME:
+                    // When user hits ESC or stop button on the address bar
+                    // while loading the page, `document.readyState` stays
+                    // `interactive`.
+                    pageState.isLoading =
+                        !menu.stopped && document.readyState !== 'complete';
+
+                    return openMenu(pageState);
+                })
+                .catch(error => console.log(error));
+
+            menu.state = new Pressed(menu, config);
+
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        /**
+         * @return {boolean}
+         *     true iff the right button and required modifiers is pressed.
+         * @param {MouseEvent} The mouse event object.
+         * @protected
+         */
+        isOpenButton(event) {
+            const button = getMouseButton(event);
+
+            const isOpenButton = this.config.openButton == button;
+
+            const ctrlGuard = !this.config.requireCtrl || event.ctrlKey;
+            const shiftGuard = !this.config.requireShift || event.shiftKey;
+
+            return isOpenButton && ctrlGuard && shiftGuard;
+        }
+
+        /**
+         * @return {boolean}
+         *     true if supressing modifiers is pressed.
+         * @param {MouseEvent} The mouse event object.
+         * @protected
+         */
+        isSupressed(event) {
+            const supressedByCtrl =
+                      this.config.isCtrlSupress && event.ctrlKey;
+
+            const supressedByShift =
+                      this.config.isShiftSupress && event.shiftKey;
+
+            if (this.config.isCtrlSupress && this.config.isShiftSupress) {
+                return supressedByCtrl && supressedByShift;
+            } else {
+                return supressedByCtrl || supressedByShift;
+            }
+        }
+
+    }
 
     /**
      * The state the user is holding the right button without moving the mouse.
-     *
-     * @constructor
-     * @param {PieMenu} menu The menu.
-     * @param {Object} config The configurations.
      */
-    Pressed: function(menu, config) {
-        this.menu = menu;
-        this.config = config;
-    },
+    class Pressed extends ShowingState {
+        /**
+         * @param {PieMenu} menu The menu.
+         * @param {Object} config The configurations.
+         */
+        constructor(menu, config) {
+            super();
+            this.menu = menu;
+            this.config = config;
+        }
+
+        /**
+         * Handles mousemove events.
+         *
+         * Transits to the Moved state.
+         *
+         * @param {MouseEvent} The mouse event object.
+         */
+        onMouseMove(event) {
+            this.menu.state = new Moved(this.menu, this.config);
+
+            super.onMouseMove(event);
+        }
+
+        /**
+         * Handles scroll events.
+         *
+         * Transits to the Moved state.
+         *
+         * @param {MouseEvent} The mouse event object.
+         */
+        onScroll(event) {
+            this.menu.state = new Moved(this.menu, this.config);
+
+            super.onScroll(event);
+        }
+
+        /**
+         * Handles mouseup events.
+         *
+         * Transits to the Released state if the released button is
+         * the button opened the menu.
+         *
+         * @param {MouseEvent} The mouse event object.
+         */
+        onMouseUp(event) {
+            if (getMouseButton(event) == this.config.openButton) {
+                this.menu.state = new Released(this.menu, this.config);
+                event.preventDefault();
+                event.stopPropagation();
+            } else {
+                super.onMouseUp(event);
+            }
+        }
+    }
 
     /**
      * The state the user is holding the right button and moved the mouse.
      *
      * Releasing the button activates a menu item.
-     *
-     * @constructor
-     * @param {PieMenu} menu The menu.
-     * @param {Object} config The configurations.
-     * @param {number=} startingButton The button activated this state.
-     *     The config.openButton is used if omitted.
      */
-    Moved: function(menu, config, startingButton) {
-        if (startingButton === undefined) {
-            startingButton = config.openButton;
+    class Moved extends ShowingState {
+        /**
+         * @param {PieMenu} menu The menu.
+         * @param {Object} config The configurations.
+         * @param {number=} startingButton The button activated this state.
+         *     The config.openButton is used if omitted.
+         */
+        constructor(menu, config, startingButton) {
+            super();
+
+            if (startingButton === undefined) {
+                startingButton = config.openButton;
+            }
+
+            this.menu = menu;
+            this.config = config;
+            this.startingButton = startingButton;
         }
 
-        this.menu = menu;
-        this.config = config;
-        this.startingButton = startingButton;
-    },
+        /**
+         * Handles mouseup events.
+         *
+         * Activates the menu item and returns to the Initial state.
+         *
+         * @param {MouseEvent} The mouse event object.
+         */
+        onMouseUp(event) {
+            if (getMouseButton(event) == this.startingButton) {
+                const clientToUser = this.menu.getClientToUser();
+                const point = this.menu.getClientPosition(event)
+                          .applyTransform(clientToUser);
+
+                try {
+                    this.menu.activateItemAt(point);
+                } catch (error) {
+                    console.log('cannot activate item:', error);
+                }
+
+                this.menu.state = new Initial(this.menu, this.config);
+                event.preventDefault();
+                event.stopPropagation();
+            } else {
+                super.onMouseUp(event);
+            }
+        }
+    }
 
     /**
      * The state the user released the right button without moving the mouse.
      *
      * Pressing and releasing the button activates a menu item.
-     *
-     * @constructor
-     * @param {PieMenu} menu The menu.
-     * @param {Object} config The configurations.
      */
-    Released: function(menu, config) {
-        this.menu = menu;
-        this.config = config;
-    }
-};
+    class Released extends ShowingState{
+        /**
+         * @param {PieMenu} menu The menu.
+         * @param {Object} config The configurations.
+         */
+        constructor(menu, config) {
+            super();
+            this.menu = menu;
+            this.config = config;
+        }
 
-PieMenu.states.Pressed.prototype = new PieMenu.states.ShowingState();
-PieMenu.states.Moved.prototype = new PieMenu.states.ShowingState();
-PieMenu.states.Released.prototype = new PieMenu.states.ShowingState();
+        /**
+         * Handles mousedown events.
+         *
+         * Transits to the Moved state.
+         *
+         * @param {MouseEvent} The mouse event object.
+         */
+        onMouseDown(event) {
+            const button = getMouseButton(event);
 
-/// State methods
-
-/**
- * Handles mousemove events.
- *
- * Moves the menu or opens a sub menu.
- *
- * @param {MouseEvent} The mouse event object.
- */
-PieMenu.states.ShowingState.prototype.onMouseMove = function(event) {
-    var clientToUser = this.menu.getClientToUser();
-    var point = this.menu.getClientPosition(event).applyTransform(clientToUser);
-
-    this.menu.follow(point);
-    this.menu.resetLabelTimer();
-};
-
-/**
- * Handles mousedown events.
- *
- * Selects the secondary variant.
- *
- * @param {MouseEvent} The mouse event object.
- */
-PieMenu.states.ShowingState.prototype.onMouseDown = function(event) {
-    this.menu.setVariant(1);
-    event.preventDefault();
-    event.stopPropagation();
-};
-
-/**
- * Handles mouseup events.
- *
- * Selects the primary variant.
- *
- * @param {MouseEvent} The mouse event object.
- */
-PieMenu.states.ShowingState.prototype.onMouseUp = function(event) {
-    this.menu.setVariant(0);
-    event.preventDefault();
-    event.stopPropagation();
-};
-
-/**
- * Handles context events.
- *
- * Prevents the default.
- *
- * @param {Event} The event object.
- */
-PieMenu.states.ShowingState.prototype.onContextMenu = function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-};
-
-/**
- * Handles keydown events.
- *
- * Selects the secondary variants if the alt key is pressed.
- *
- * @param {KeyboardEvent} The keyboard event object.
- */
-PieMenu.states.ShowingState.prototype.onKeyDown = function(event) {
-    if (event.altKey) {
-        this.menu.setVariant(1);
-        event.preventDefault();
-        event.stopPropagation();
-    }
-
-    var isESCPressed;
-
-    if ('key' in event) {
-        isESCPressed = (event.key === "Esc");
-    } else {
-        isESCPressed = (event.keyCode === event.DOM_VK_ESCAPE);
-    }
-
-    if (isESCPressed) {
-        this.menu.state = new PieMenu.states.Initial(this.menu, this.config);
-    }
-};
-
-/**
- * Handles keyup events.
- *
- * Selects the primary variants if the alt key is released.
- *
- * @param {KeyboardEvent} The keyboard event object.
- */
-PieMenu.states.ShowingState.prototype.onKeyUp = function(event) {
-    if (!event.altKey) {
-        this.menu.setVariant(0);
-        event.preventDefault();
-        event.stopPropagation();
-    }
-};
-
-/**
- * Handles scroll events.
- *
- * Moves the menu or opens a sub menu.
- *
- * @param {MouseEvent} The mouse event object.
- */
-PieMenu.states.ShowingState.prototype.onScroll = function(event) {
-    menu.follow();
-};
-
-//// Initial state methods
-
-/**
- * Handles context events.
- *
- * Prevents the default if going to open the menu.
- *
- * @param {Event} The event object.
- */
-PieMenu.states.Initial.prototype.onContextMenu = function(event) {
-    if (this.isOpenButton(event) && !this.isSupressed(event)) {
-        event.preventDefault();
-        event.stopPropagation();
-    }
-};
-
-/**
- * Handles mousedown events.
- *
- * If the correct button and modifiers is pressed, opens the menu and
- * transits to the Pressed state.
- *
- * @param {MouseEvent} The mouse event object.
- */
-PieMenu.states.Initial.prototype.onMouseDown = function(event) {
-    if (this.isOpenButton(event) && !this.isSupressed(event)) {
-        var menu = this.menu;
-        var config = this.config;
-
-        var openMenu = function(pageState) {
-            menu.container.style.display = 'inline';
-
-            var clientPosition = menu.getClientPosition(event);
-            var point = clientPosition.applyTransform(menu.getClientToUser());
-            var context = detectContext(event.target);
-
-            menu.container.style.display = 'inline';
-            menu.openAt(point, menu.contexts[context], event.target, pageState);
+            this.menu.state = new Moved(this.menu, this.config, button);
+            event.preventDefault();
+            event.stopPropagation();
         };
-
-        queryPageState(openMenu);
-
-        menu.state = new PieMenu.states.Pressed(menu, config);
-
-        event.preventDefault();
-        event.stopPropagation();
     }
-};
+
+    return {
+        Initial,
+        Pressed,
+        Moved,
+        Released,
+    };
+})();
 
 /**
  * Returns the mouse button pressed.
@@ -870,7 +1055,7 @@ PieMenu.states.Initial.prototype.onMouseDown = function(event) {
  * @param {MouseEvent} The mouse event object.
  */
 function getMouseButton(event) {
-   var button = event.button;
+   const button = event.button;
 
     if (/^Mac/.test(navigator.platform)) {
         if (event.button == 0 && event.ctrlKey) {
@@ -880,127 +1065,3 @@ function getMouseButton(event) {
 
     return button;
 }
-
-/**
- * @return {boolean}
- *     true iff the right button and required modifiers is pressed.
- * @param {MouseEvent} The mouse event object.
- * @protected
- */
-PieMenu.states.Initial.prototype.isOpenButton = function(event) {
-    var button = getMouseButton(event);
-
-    var isOpenButton = this.config.openButton == button;
-
-    var ctrlGuard = !this.config.requireCtrl || event.ctrlKey;
-    var shiftGuard = !this.config.requireShift || event.shiftKey;
-
-    return isOpenButton && ctrlGuard && shiftGuard;
-};
-
-/**
- * @return {boolean}
- *     true if supressing modifiers is pressed.
- * @param {MouseEvent} The mouse event object.
- * @protected
- */
-PieMenu.states.Initial.prototype.isSupressed = function(event) {
-    var supressedByCtrl =
-        this.config.isCtrlSupress && event.ctrlKey;
-
-    var supressedByShift =
-        this.config.isShiftSupress && event.shiftKey;
-
-    if (this.config.isCtrlSupress && this.config.isShiftSupress) {
-        return supressedByCtrl && supressedByShift;
-    } else {
-        return supressedByCtrl || supressedByShift;
-    }
-};
-
-//// Pressed state methods
-
-/**
- * Handles mousemove events.
- *
- * Transits to the Moved state.
- *
- * @param {MouseEvent} The mouse event object.
- */
-PieMenu.states.Pressed.prototype.onMouseMove = function(event) {
-    this.menu.state = new PieMenu.states.Moved(this.menu, this.config);
-
-    PieMenu.states.ShowingState.prototype.onMouseMove.call(this, event);
-};
-
-/**
- * Handles scroll events.
- *
- * Transits to the Moved state.
- *
- * @param {MouseEvent} The mouse event object.
- */
-PieMenu.states.Pressed.prototype.onScroll = function(event) {
-    this.menu.state = new PieMenu.states.Moved(this.menu, this.config);
-
-    PieMenu.states.ShowingState.prototype.onMouseMove.call(this, event);
-};
-
-/**
- * Handles mouseup events.
- *
- * Transits to the Released state if the released button is 
- * the button opened the menu.
- *
- * @param {MouseEvent} The mouse event object.
- */
-PieMenu.states.Pressed.prototype.onMouseUp = function(event) {
-    if (getMouseButton(event) == this.config.openButton) {
-        this.menu.state = new PieMenu.states.Released(this.menu, this.config);
-        event.preventDefault();
-        event.stopPropagation();
-    } else {
-        PieMenu.states.ShowingState.prototype.onMouseUp.call(this, event);
-    }
-};
-
-//// Moved state methods
-
-/**
- * Handles mouseup events.
- *
- * Activates the menu item and returns to the Initial state.
- *
- * @param {MouseEvent} The mouse event object.
- */
-PieMenu.states.Moved.prototype.onMouseUp = function(event) {
-    if (getMouseButton(event) == this.startingButton) {
-        var clientToUser = this.menu.getClientToUser();
-        var point =
-            this.menu.getClientPosition(event).applyTransform(clientToUser);
-
-        this.menu.activateItemAt(point);
-        this.menu.state = new PieMenu.states.Initial(this.menu, this.config);
-        event.preventDefault();
-        event.stopPropagation();
-    } else {
-        PieMenu.states.ShowingState.prototype.onMouseUp.call(this, event);
-    }
-};
-
-//// Released state methods
-
-/**
- * Handles mousedown events.
- *
- * Transits to the Moved state.
- *
- * @param {MouseEvent} The mouse event object.
- */
-PieMenu.states.Released.prototype.onMouseDown = function(event) {
-    var button = getMouseButton(event);
-
-    this.menu.state = new PieMenu.states.Moved(this.menu, this.config, button);
-    event.preventDefault();
-    event.stopPropagation();
-};

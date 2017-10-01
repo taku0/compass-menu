@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>CompassMenu options</title>
+    <style>
+     th {
+       text-align: left
+     }
+    </style>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <th><label for="openButton" data-i18n="openButton_title">Mouse button to open menu</label></th>
+        <td>
+          <select name="openButton" id="openButton">
+            <option value="0" data-i18n="openButton_options.left_button">Left button</option>
+            <option value="1" data-i18n="openButton_options.middle_button">Middle button</option>
+            <option value="2" data-i18n="openButton_options.right_button" checked="checked">Right button</option>
+            <option value="3" data-i18n="openButton_options.fourth_button">Fourth button</option>
+            <option value="4" data-i18n="openButton_options.fifth_button">Fifth button</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th><label for="requireCtrl" data-i18n="requireCtrl_title">Require Ctrl to open menu</label></th>
+        <td><input name="requireCtrl" id="requireCtrl" type="checkbox"/></td>
+        </td>
+      </tr>
+      <tr>
+        <th><label for="requireShift" data-i18n="requireShift_title">Require Shift to open menu</label></th>
+        <td><input name="requireShift" id="requireShift" type="checkbox"/></td>
+        </td>
+      </tr>
+      <tr>
+        <th><label for="isCtrlSupress" data-i18n="isCtrlSupress_title">Ctrl to supress menu</label></th>
+        <td><input name="isCtrlSupress" id="isCtrlSupress" type="checkbox"/></td>
+        </td>
+      </tr>
+      <tr>
+        <th><label for="isShiftSupress" data-i18n="isShiftSupress_title">Shift to supress menu</label></th>
+        <td><input name="isShiftSupress" id="isShiftSupress" type="checkbox" checked="checked"/></td>
+        </td>
+      </tr>
+      <tr>
+        <th><label for="labelDelay" data-i18n="labelDelay_title">Label delay in milliseconds</label></th>
+        <td><input name="labelDelay" id="labelDelay" type="number" value="500" min="0"/> ms</td>
+        </td>
+      </tr>
+    </table>
+    <script src="options.js"></script>
+  </body>
+</html>

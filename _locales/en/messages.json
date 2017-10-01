@@ -1,0 +1,290 @@
+{
+    "extensionName": {
+        "message": "CompassMenu",
+        "description": "Name of the extension."
+    },
+    "extensionDescription": {
+        "message": "A Mild Mouse Gesture.",
+        "description": "Description of the extension."
+    },
+    "page": {
+        "message": "Page",
+        "description": "Menu label."
+    },
+    "bookmark": {
+        "message": "Bookmark",
+        "description": "Menu label."
+    },
+    "save_page": {
+        "message": "Save Page",
+        "description": "Menu Label."
+    },
+    "view_page_source": {
+        "message": "View Page Source",
+        "description": "Menu Label."
+    },
+    "view_page_info": {
+        "message": "View Page Info",
+        "description": "Menu Label."
+    },
+    "window": {
+        "message": "Window",
+        "description": "Menu Label."
+    },
+    "view_next_window": {
+        "message": "View Next Window",
+        "description": "Menu Label."
+    },
+    "close_window": {
+        "message": "Close Window",
+        "description": "Menu Label."
+    },
+    "undo_close_window": {
+        "message": "Undo Close Window",
+        "description": "Menu Label."
+    },
+    "view_previous_window": {
+        "message": "View Previous Window",
+        "description": "Menu Label."
+    },
+    "open_new_window": {
+        "message": "Open New Window",
+        "description": "Menu Label."
+    },
+    "duplicate_window": {
+        "message": "Duplicate Window",
+        "description": "Menu Label."
+    },
+    "tab": {
+        "message": "Tab",
+        "description": "Menu Label."
+    },
+    "view_next_tab": {
+        "message": "View Next Tab",
+        "description": "Menu Label."
+    },
+    "close_tab": {
+        "message": "Close Tab",
+        "description": "Menu Label."
+    },
+    "undo_close_tab": {
+        "message": "Undo Close Tab",
+        "description": "Menu Label."
+    },
+    "view_previous_tab": {
+        "message": "View Previous Tab",
+        "description": "Menu Label."
+    },
+    "open_new_tab": {
+        "message": "Open New Tab",
+        "description": "Menu Label."
+    },
+    "duplicate_tab": {
+        "message": "Duplicate Tab",
+        "description": "Menu Label."
+    },
+    "navigation": {
+        "message": "Navigation",
+        "description": "Menu Label."
+    },
+    "forward": {
+        "message": "Forward",
+        "description": "Menu Label."
+    },
+    "go_to_last": {
+        "message": "Go to Last",
+        "description": "Menu Label."
+    },
+    "reload": {
+        "message": "Reload",
+        "description": "Menu Label."
+    },
+    "reload_without_cache": {
+        "message": "Reload without Cache",
+        "description": "Menu Label."
+    },
+    "stop": {
+        "message": "Stop",
+        "description": "Menu Label."
+    },
+    "back": {
+        "message": "Back",
+        "description": "Menu Label."
+    },
+    "go_to_first": {
+        "message": "Go to First",
+        "description": "Menu Label."
+    },
+    "up": {
+        "message": "Up",
+        "description": "Menu Label."
+    },
+    "open_location": {
+        "message": "Open Location",
+        "description": "Menu Label."
+    },
+    "selection": {
+        "message": "Selection",
+        "description": "Menu Label."
+    },
+    "open_selection": {
+        "message": "Open Selection",
+        "description": "Menu Label."
+    },
+    "open_selection_in_new_tab": {
+        "message": "Open Selection in New Tab",
+        "description": "Menu Label."
+    },
+    "search_the_web": {
+        "message": "Search the Web",
+        "description": "Menu Label."
+    },
+    "search_the_web_in_new_tab": {
+        "message": "Search the Web in New Tab",
+        "description": "Menu Label."
+    },
+    "copy_selection": {
+        "message": "Copy Selection",
+        "description": "Menu Label."
+    },
+    "image": {
+        "message": "Image",
+        "description": "Menu Label."
+    },
+    "view_image": {
+        "message": "View Image",
+        "description": "Menu Label."
+    },
+    "view_image_in_new_tab": {
+        "message": "View Image in New Tab",
+        "description": "Menu Label."
+    },
+    "save_image": {
+        "message": "Save Image",
+        "description": "Menu Label."
+    },
+    "copy_image_location": {
+        "message": "Copy Image Location",
+        "description": "Menu Label."
+    },
+    "link": {
+        "message": "Link",
+        "description": "Menu Label."
+    },
+    "open_link_in_new_tab": {
+        "message": "Open Link in New Tab",
+        "description": "Menu Label."
+    },
+    "save_link": {
+        "message": "Save Link",
+        "description": "Menu Label."
+    },
+    "open_link_in_new_window": {
+        "message": "Open Link in New Window",
+        "description": "Menu Label."
+    },
+    "copy_location": {
+        "message": "Copy Location",
+        "description": "Menu Label."
+    },
+    "text": {
+        "message": "Text",
+        "description": "Menu Label."
+    },
+    "copy_text": {
+        "message": "Copy Text",
+        "description": "Menu Label."
+    },
+    "paste_text": {
+        "message": "Paste Text",
+        "description": "Menu Label."
+    },
+    "cut_text": {
+        "message": "Cut Text",
+        "description": "Menu Label."
+    },
+    "undo_text": {
+        "message": "Undo",
+        "description": "Menu Label."
+    },
+    "redo_text": {
+        "message": "Redo",
+        "description": "Menu Label."
+    },
+    "frame": {
+        "message": "Frame",
+        "description": "Menu Label."
+    },
+    "view_frame": {
+        "message": "View Frame",
+        "description": "Menu Label."
+    },
+    "view_frame_in_new_tab": {
+        "message": "View Frame in New Tab",
+        "description": "Menu Label."
+    },
+    "reload_frame": {
+        "message": "Reload Frame",
+        "description": "Menu Label."
+    },
+    "reload_frame_without_cache": {
+        "message": "Reload Frame without Cache",
+        "description": "Menu Label."
+    },
+    "save_frame": {
+        "message": "Save Frame",
+        "description": "Menu Label."
+    },
+    "view_frame_source": {
+        "message": "View Frame Source",
+        "description": "Menu Label."
+    },
+    "view_frame_info": {
+        "message": "View Frame Info",
+        "description": "Menu Label."
+    },
+    "openButton_title": {
+        "message": "Mouse button to open menu",
+        "description": "Preference title."
+    },
+    "openButton_options.left_button": {
+        "message": "Left button",
+        "description": "An option for openButton preference."
+    },
+    "openButton_options.middle_button": {
+        "message": "Middle button",
+        "description": "An option for openButton preference."
+    },
+    "openButton_options.right_button": {
+        "message": "Right button",
+        "description": "An option for openButton preference."
+    },
+    "openButton_options.fourth_button": {
+        "message": "Fourth button",
+        "description": "An option for openButton preference."
+    },
+    "openButton_options.fifth_button": {
+        "message": "Fifth button",
+        "description": "An option for openButton preference."
+    },
+    "requireCtrl_title": {
+        "message": "Require Ctrl to open menu",
+        "description": "Preference title."
+    },
+    "requireShift_title": {
+        "message": "Require Shift to open menu",
+        "description": "Preference title."
+    },
+    "isCtrlSupress_title": {
+        "message": "Ctrl to supress menu",
+        "description": "Preference title."
+    },
+    "isShiftSupress_title": {
+        "message": "Shift to supress menu",
+        "description": "Preference title."
+    },
+    "labelDelay_title": {
+        "message": "Label delay in milliseconds",
+        "description": "Preference title."
+    }
+}

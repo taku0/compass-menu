@@ -1,3 +1,6 @@
 *~
 .tern-port
-*.xpi
+TODO.txt
+memo.txt
+tmp
+web-ext-artifacts

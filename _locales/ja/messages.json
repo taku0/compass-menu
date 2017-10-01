@@ -1,0 +1,290 @@
+{
+    "extensionName": {
+        "message": "コンパスメニュー",
+        "description": "Name of the extension."
+    },
+    "extensionDescription": {
+        "message": "やさしいマウスジェスチャ.",
+        "description": "Description of the extension."
+    },
+    "page": {
+        "message": "ページ",
+        "description": "Menu label."
+    },
+    "bookmark": {
+        "message": "ブックマークに追加",
+        "description": "Menu label."
+    },
+    "save_page": {
+        "message": "ページを保存",
+        "description": "Menu Label."
+    },
+    "view_page_source": {
+        "message": "ページのソースを表示",
+        "description": "Menu Label."
+    },
+    "view_page_info": {
+        "message": "ページの情報を表示",
+        "description": "Menu Label."
+    },
+    "window": {
+        "message": "ウィンドウ",
+        "description": "Menu Label."
+    },
+    "view_next_window": {
+        "message": "次のウィンドウを表示",
+        "description": "Menu Label."
+    },
+    "close_window": {
+        "message": "ウィンドウを閉じる",
+        "description": "Menu Label."
+    },
+    "undo_close_window": {
+        "message": "閉じたウィンドウを復元",
+        "description": "Menu Label."
+    },
+    "view_previous_window": {
+        "message": "前のウィンドウを表示",
+        "description": "Menu Label."
+    },
+    "open_new_window": {
+        "message": "新しいウィンドウを開く",
+        "description": "Menu Label."
+    },
+    "duplicate_window": {
+        "message": "ウィンドウを複製",
+        "description": "Menu Label."
+    },
+    "tab": {
+        "message": "タブ",
+        "description": "Menu Label."
+    },
+    "view_next_tab": {
+        "message": "次のタブを表示",
+        "description": "Menu Label."
+    },
+    "close_tab": {
+        "message": "タブを閉じる",
+        "description": "Menu Label."
+    },
+    "undo_close_tab": {
+        "message": "閉じたタブを復元",
+        "description": "Menu Label."
+    },
+    "view_previous_tab": {
+        "message": "前のタブを表示",
+        "description": "Menu Label."
+    },
+    "open_new_tab": {
+        "message": "新しいタブを開く",
+        "description": "Menu Label."
+    },
+    "duplicate_tab": {
+        "message": "タブを複製",
+        "description": "Menu Label."
+    },
+    "navigation": {
+        "message": "ナビゲーション",
+        "description": "Menu Label."
+    },
+    "forward": {
+        "message": "進む",
+        "description": "Menu Label."
+    },
+    "go_to_last": {
+        "message": "最後のページに進む",
+        "description": "Menu Label."
+    },
+    "reload": {
+        "message": "更新",
+        "description": "Menu Label."
+    },
+    "reload_without_cache": {
+        "message": "キャッシュを無視して更新",
+        "description": "Menu Label."
+    },
+    "stop": {
+        "message": "中止",
+        "description": "Menu Label."
+    },
+    "back": {
+        "message": "戻る",
+        "description": "Menu Label."
+    },
+    "go_to_first": {
+        "message": "最初のページに戻る",
+        "description": "Menu Label."
+    },
+    "up": {
+        "message": "上のページを表示",
+        "description": "Menu Label."
+    },
+    "open_location": {
+        "message": "URLを入力",
+        "description": "Menu Label."
+    },
+    "selection": {
+        "message": "選択",
+        "description": "Menu Label."
+    },
+    "open_selection": {
+        "message": "選択したURLを開く",
+        "description": "Menu Label."
+    },
+    "open_selection_in_new_tab": {
+        "message": "選択したURLを新しいタブで開く",
+        "description": "Menu Label."
+    },
+    "search_the_web": {
+        "message": "ウェブを検索",
+        "description": "Menu Label."
+    },
+    "search_the_web_in_new_tab": {
+        "message": "新しいタブでウェブを検索",
+        "description": "Menu Label."
+    },
+    "copy_selection": {
+        "message": "選択したテキストをコピー",
+        "description": "Menu Label."
+    },
+    "image": {
+        "message": "画像",
+        "description": "Menu Label."
+    },
+    "view_image": {
+        "message": "画像だけを表示",
+        "description": "Menu Label."
+    },
+    "view_image_in_new_tab": {
+        "message": "新しいタブで画像だけを表示",
+        "description": "Menu Label."
+    },
+    "save_image": {
+        "message": "画像を保存",
+        "description": "Menu Label."
+    },
+    "copy_image_location": {
+        "message": "画像のURLをコピー",
+        "description": "Menu Label."
+    },
+    "link": {
+        "message": "リンク",
+        "description": "Menu Label."
+    },
+    "open_link_in_new_tab": {
+        "message": "リンクを新しいタブで開く",
+        "description": "Menu Label."
+    },
+    "save_link": {
+        "message": "リンク先を保存",
+        "description": "Menu Label."
+    },
+    "open_link_in_new_window": {
+        "message": "リンクを新しいウィンドウで開く",
+        "description": "Menu Label."
+    },
+    "copy_location": {
+        "message": "リンクのURLをコピー",
+        "description": "Menu Label."
+    },
+    "text": {
+        "message": "テキスト",
+        "description": "Menu Label."
+    },
+    "copy_text": {
+        "message": "テキストをコピー",
+        "description": "Menu Label."
+    },
+    "paste_text": {
+        "message": "テキストを貼り付け",
+        "description": "Menu Label."
+    },
+    "cut_text": {
+        "message": "テキストを切り取り",
+        "description": "Menu Label."
+    },
+    "undo_text": {
+        "message": "取り消し",
+        "description": "Menu Label."
+    },
+    "redo_text": {
+        "message": "やり直し",
+        "description": "Menu Label."
+    },
+    "frame": {
+        "message": "フレーム",
+        "description": "Menu Label."
+    },
+    "view_frame": {
+        "message": "このフレームだけを表示",
+        "description": "Menu Label."
+    },
+    "view_frame_in_new_tab": {
+        "message": "新しいタブでこのフレームだけを表示",
+        "description": "Menu Label."
+    },
+    "reload_frame": {
+        "message": "このフレームを更新",
+        "description": "Menu Label."
+    },
+    "reload_frame_without_cache": {
+        "message": "このフレームをキャッシュを無視して更新",
+        "description": "Menu Label."
+    },
+    "save_frame": {
+        "message": "このフレームを保存",
+        "description": "Menu Label."
+    },
+    "view_frame_source": {
+        "message": "このフレームのソースを表示",
+        "description": "Menu Label."
+    },
+    "view_frame_info": {
+        "message": "このフレームの情報を表示",
+        "description": "Menu Label."
+    },
+    "openButton_title": {
+        "message": "メニューを開くためのマウスボタン",
+        "description": "Preference title."
+    },
+    "openButton_options.left_button": {
+        "message": "左ボタン",
+        "description": "An option for openButton preference."
+    },
+    "openButton_options.middle_button": {
+        "message": "中ボタン",
+        "description": "An option for openButton preference."
+    },
+    "openButton_options.right_button": {
+        "message": "右ボタン",
+        "description": "An option for openButton preference."
+    },
+    "openButton_options.fourth_button": {
+        "message": "第4ボタン",
+        "description": "An option for openButton preference."
+    },
+    "openButton_options.fifth_button": {
+        "message": "第5ボタン",
+        "description": "An option for openButton preference."
+    },
+    "requireCtrl_title": {
+        "message": "Ctrlを押したときのみメニューを開く",
+        "description": "Preference title."
+    },
+    "requireShift_title": {
+        "message": "Shiftを押したときのみメニューを開く",
+        "description": "Preference title."
+    },
+    "isCtrlSupress_title": {
+        "message": "Ctrlでメニューを抑制",
+        "description": "Preference title."
+    },
+    "isShiftSupress_title": {
+        "message": "Shiftでメニューを抑制",
+        "description": "Preference title."
+    },
+    "labelDelay_title": {
+        "message": "ラベルを表示するまでの時間(ミリ秒)",
+        "description": "Preference title."
+    }
+}

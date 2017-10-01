@@ -1,0 +1,53 @@
+{
+    "manifest_version": 2,
+    "name": "__MSG_extensionName__",
+    "version": "3.0.0",
+    "description": "__MSG_extensionDescription__",
+    "author": "taku0 ( https://github.com/taku0 )",
+    "homepage_url": "http://www.tatapa.org/~takuo/compass_menu/",
+    "default_locale": "en",
+    "applications": {
+        "gecko": {
+            "id": "compass_menu@tatapa.org"
+        }
+    },
+    "icons": {
+        "48": "icons/icon.png"
+    },
+    "permissions": [
+        "<all_urls>",
+        "storage",
+        "tabs",
+        "bookmarks",
+        "downloads",
+        "sessions",
+        "clipboardWrite",
+        "clipboardRead"
+    ],
+    "background": {
+        "scripts": [
+            "lib/commands.js",
+            "lib/main.js"
+        ]
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "all_frames": true,
+            "js": [
+                "data/detectContext.js",
+                "data/menu.js",
+                "data/menuItems.js",
+                "data/queryPageState.js",
+                "data/types.js",
+                "data/vector2D.js",
+                "data/initialize.js"
+            ],
+            "run_at": "document_start"
+        }
+    ],
+    "options_ui": {
+        "page": "options/options.html"
+    },
+    "web_accessible_resources": ["data/menu.svg", "data/menu_icons.svg"]
+}
