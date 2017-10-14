@@ -1020,7 +1020,7 @@ function copyText(text) {
 
     document.execCommand('copy');
 
-    document.removeChild(p);
+    document.body.removeChild(p);
 }
 
 /**
