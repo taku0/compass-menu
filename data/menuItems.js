@@ -46,14 +46,13 @@ const pageMenu = {
         ],
         null,
         [
-            // Not supported?
-            // {
-            //     icon: '#source',
-            //     label: 'view_page_source',
-            //     action: (menu) => requestShowPageSource(
-            //       menu.pageState.topURL
-            //     ),
-            // },
+            {
+                icon: '#source',
+                label: 'view_page_source',
+                action: (menu) => requestShowPageSource(
+                  menu.pageState.topURL
+                ),
+            },
         ],
         null,
         null,
@@ -587,12 +586,11 @@ const frameMenu = {
         ],
         null,
         [
-            // Not supported?
-            // {
-            //     icon: '#source',
-            //     label: 'view_frame_source',
-            //     action: () => requestShowPageSource(window.location.href),
-            // },
+            {
+                icon: '#source',
+                label: 'view_frame_source',
+                action: () => requestShowPageSource(window.location.href),
+            },
         ],
         [
             pageMenu,
