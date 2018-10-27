@@ -383,7 +383,7 @@ const imageMenu = {
                 action: (menu) => {
                     const url = menu.target.src;
 
-                    copyText(url);
+                    requestWriteTextToClipboard(url);
                 },
             },
         ],
@@ -463,7 +463,7 @@ const linkMenu = {
                 action: (menu) => {
                     const url = extractLinkURL(menu.target);
 
-                    copyText(url);
+                    requestWriteTextToClipboard(url);
                 },
             },
         ],
@@ -993,32 +993,15 @@ function saveImageURL(url) {
 }
 
 /**
- * Copy text.
+ * Requests the add-on to copy text.
  *
  * @param {string} text A string to be copied
  */
-function copyText(text) {
-    const p = document.createElement('p');
-
-    p.textContent = text;
-
-    document.body.appendChild(p);
-
-    p.focus();
-
-    const selection = window.getSelection();
-
-    selection.removeAllRanges();
-
-    const range = document.createRange();
-
-    range.selectNode(p);
-
-    selection.addRange(range);
-
-    document.execCommand('copy');
-
-    document.body.removeChild(p);
+function requestWriteTextToClipboard(text) {
+    browser.runtime.sendMessage({
+        name: 'requestWriteTextToClipboard',
+        text,
+    });
 }
 
 /**
@@ -1042,33 +1025,21 @@ function requestReloadTab(bypassCache) {
     });
 }
 
-function paste(target) {
+async function paste(target) {
     // `document.execCommand('paste');` modifies its `textContent` rather than
     // the `value` property.  So, if the `value` of the `target` is different
     // to its `textContent` (i.e. the user edited its text), the pasted text
     // is not reflected.
     //
-    // Therefore, this function pastes the text into the new textarea, then
-    // modifies `target.value` manually.
+    // Therefore, this function modifies `target.value` manually.
+
+    const pasted = await browser.runtime.sendMessage({
+        name: 'requestReadTextFromClipboard',
+    });
 
     const selectionStart = target.selectionStart;
     const selectionEnd = target.selectionEnd;
     const selectionDirection = target.selectionDirection;
-
-    const newTextArea = document.createElement('textarea');
-
-    newTextArea.contentEditable = true;
-    newTextArea.style.width = "0px";
-    newTextArea.style.height = "0px";
-    target.parentNode.insertBefore(newTextArea, target);
-    newTextArea.focus();
-    document.execCommand('paste');
-
-    const pasted = newTextArea.value;
-
-    console.log(pasted);
-
-    target.parentNode.removeChild(newTextArea);
 
     const oldText = target.value;
     const newText = oldText.slice(0, selectionStart) +
