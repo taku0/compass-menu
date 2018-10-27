@@ -35,7 +35,7 @@
    - Texts are labels.
    -
    - Balloons and texts are generated with generate_balloon script. -->
-<svg version="1.1" id="menu" class="supress-compass-menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="700px" height="300px" data-supress-compass-menu='data-supress-compass-menu'>
+<svg version="1.1" id="menu" class="supress-compass-menu" xmlns="http://www.w3.org/2000/svg" width="700px" height="300px" data-supress-compass-menu='data-supress-compass-menu'>
   <defs>
     <filter id="drop-shadow" filterUnits="userSpaceOnUse" x="-300" y="-100" width="700" height="300">
       <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>
@@ -155,14 +155,14 @@
     <path id="marker6" d="M54.3926703324604,6.21981672776687 A44,44 0 0 0 45.6073296675396,6.21981672776687" stroke="#666" stroke-width="2" stroke-linecap="round" fill="none"/>
     <path id="marker7" d="M84.0633514529856,22.1488225062138 A44,44 0 0 0 77.8511774937862,15.9366485470144" stroke="#666" stroke-width="2" stroke-linecap="round" fill="none"/>
 
-    <use id="item0" x="73" y="39.5" xlink:href="menu_icons.svg#forward"/>
-    <use id="item1" x="63.1880771697493" y="63.1880771697493" xlink:href="menu_icons.svg#page"/>
-    <use id="item2" x="39.5" y="73" xlink:href="menu_icons.svg#save"/>
-    <use id="item3" x="15.8119228302507" y="63.1880771697493" xlink:href="menu_icons.svg#page"/>
-    <use id="item4" x="6" y="39.5" xlink:href="menu_icons.svg#back"/>
-    <use id="item5" x="15.8119228302507" y="15.8119228302507" xlink:href="menu_icons.svg#window"/>
-    <use id="item6" x="39.5" y="6" xlink:href="menu_icons.svg#up"/>
-    <use id="item7" x="63.1880771697493" y="15.8119228302507" xlink:href="menu_icons.svg#tab"/>
+    <use id="item0" x="73" y="39.5" href="menu_icons.svg#forward"/>
+    <use id="item1" x="63.1880771697493" y="63.1880771697493" href="menu_icons.svg#page"/>
+    <use id="item2" x="39.5" y="73" href="menu_icons.svg#save"/>
+    <use id="item3" x="15.8119228302507" y="63.1880771697493" href="menu_icons.svg#page"/>
+    <use id="item4" x="6" y="39.5" href="menu_icons.svg#back"/>
+    <use id="item5" x="15.8119228302507" y="15.8119228302507" href="menu_icons.svg#window"/>
+    <use id="item6" x="39.5" y="6" href="menu_icons.svg#up"/>
+    <use id="item7" x="63.1880771697493" y="15.8119228302507" href="menu_icons.svg#tab"/>
 
     <text id="shadow_text" x="0" y="0" font-size="16" stroke="none" fill="#666666" text-anchor="start" dominant-baseline="central" display="none"></text>
 

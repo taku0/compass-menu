@@ -425,11 +425,7 @@ class PieMenu {
                 const itemElement = this.itemElements[i];
 
                 itemElement.style.display = 'inline';
-                itemElement.setAttributeNS(
-                    'http://www.w3.org/1999/xlink',
-                    'href',
-                    variant.icon
-                );
+                itemElement.setAttribute('href', variant.icon);
 
                 const hasChildren = variant.children &&
                           variant.children.length > 0;
