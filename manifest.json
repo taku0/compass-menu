@@ -22,7 +22,8 @@
         "downloads",
         "sessions",
         "clipboardWrite",
-        "clipboardRead"
+        "clipboardRead",
+        "search"
     ],
     "background": {
         "scripts": [
