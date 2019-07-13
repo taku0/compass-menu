@@ -204,7 +204,7 @@ function createTextSetters(ownerDocument) {
  * @param {Object.<string, *>} config The add-on configuration.
  */
 function initialize(event, iframe, config) {
-    iframe.style.display = 'inline';
+    iframe.style.visibility = 'visible';
 
     const ownerDocument = iframe.contentDocument;
 
@@ -353,7 +353,9 @@ async function onBodyAdded() {
     iframe.style.margin = '0';
     iframe.style.padding = '0';
     iframe.style.zIndex = '2147483647';
-    iframe.style.display = 'none';
+    // This was `iframe.style.style.display = 'none'` but it causes getBBox
+    // to raise an error in Firefox 58.
+    iframe.style.visibility = 'hidden';
 
     iframe.src = browser.extension.getURL('data/menu.svg');
 
