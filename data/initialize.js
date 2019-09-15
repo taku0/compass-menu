@@ -352,6 +352,8 @@ async function onBodyAdded() {
     iframe.style.position = 'absolute';
     iframe.style.margin = '0';
     iframe.style.padding = '0';
+    iframe.style.left = '0';
+    iframe.style.top = '0';
     iframe.style.zIndex = '2147483647';
     // This was `iframe.style.style.display = 'none'` but it causes getBBox
     // to raise an error in Firefox 58.
