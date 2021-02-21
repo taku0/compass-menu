@@ -344,6 +344,18 @@ async function onBodyAdded() {
 
     const config = await getConfiguration();
 
+
+    class CompassMenuRoot extends HTMLElement {
+    }
+
+    customElements.define('org-tatapa-compass-menu-root', CompassMenuRoot);
+
+    const root = document.createElement('org-tatapa-compass-menu-root');
+
+    document.body.appendChild(root);
+
+    const shadow = root.attachShadow({mode: 'closed'});
+
     const iframe = document.createElement('iframe');
 
     iframe.style.borderStyle = 'none';
@@ -361,7 +373,7 @@ async function onBodyAdded() {
 
     iframe.src = browser.extension.getURL('data/menu.svg');
 
-    document.body.appendChild(iframe);
+    shadow.appendChild(iframe);
 
     function listener(event) {
         window.removeEventListener('mousedown', listener, false);
