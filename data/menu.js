@@ -121,13 +121,12 @@ class PieMenu {
      */
     getCenter() {
         const box = this.outer.getBBox();
+        const menuBox = this.menuNode.getBBox();
 
-        const transform = this.outer.getTransformToElement(this.menuNode);
+        const centerX = menuBox.x + box.width / 2;
+        const centerY = menuBox.y + box.height / 2;
 
-        const centerX = box.x + box.width / 2;
-        const centerY = box.y + box.height / 2;
-
-        return new Vector2D(centerX, centerY).applyTransform(transform);
+        return new Vector2D(centerX, centerY);
     }
 
     /**
