@@ -274,7 +274,7 @@ function loadIconsAsync(ownerDocument) {
 
     const iframe = document.createElement('iframe');
 
-    iframe.src = browser.extension.getURL('data/menu_icons.svg');
+    iframe.src = browser.runtime.getURL('data/menu_icons.svg');
 
     iframe.onload = () => {
         ownerDocument.documentElement.appendChild(
@@ -371,7 +371,7 @@ async function onBodyAdded() {
     // to raise an error in Firefox 58.
     iframe.style.visibility = 'hidden';
 
-    iframe.src = browser.extension.getURL('data/menu.svg');
+    iframe.src = browser.runtime.getURL('data/menu.svg');
 
     shadow.appendChild(iframe);
 
